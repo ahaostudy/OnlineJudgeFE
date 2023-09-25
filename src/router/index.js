@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
 const Index = () => import('../views/Index.vue')
 const Login = () => import('../views/Login.vue')
+const Problems = () => import('../views/Problems.vue')
+const Problem = () => import('../views/Problem.vue')
 
 const routes = [
     {
@@ -8,8 +10,16 @@ const routes = [
         component: Index
     },
     {
+        path: '/problems',
+        component: Problems
+    },
+    {
         path: '/login',
         component: Login
+    },
+    {
+        path: '/problem/:id',
+        component: Problem
     }
 ]
 

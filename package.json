@@ -9,7 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@kangc/v-md-editor": "^2.3.17",
     "axios": "^1.5.0",
+    "monaco-editor": "^0.43.0",
+    "monaco-vim": "^0.4.0",
     "pinia": "^2.1.6",
     "vue": "^3.3.4",
     "vue-router": "^4.0.13"
@@ -17,6 +20,7 @@
   "devDependencies": {
     "@arco-design/web-vue": "^2.52.0",
     "@vitejs/plugin-vue": "^4.2.3",
+    "less": "^4.2.0",
     "unplugin-auto-import": "^0.16.6",
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.4.5"

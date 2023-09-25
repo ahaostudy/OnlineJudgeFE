@@ -1,5 +1,9 @@
 <template>
     <div>
-        <h1>INDEX</h1>
+        <Navbar></Navbar>
     </div>
 </template>
+
+<script setup>
+import Navbar from "../components/common/Navbar.vue"
+</script>
