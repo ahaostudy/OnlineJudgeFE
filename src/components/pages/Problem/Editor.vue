@@ -8,7 +8,7 @@
 <script setup>
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.main.js';
 import { initVimMode } from 'monaco-vim';
-import { getCurrentInstance, onMounted } from 'vue';
+import { getCurrentInstance, onMounted, watch } from 'vue';
 
 const props = defineProps({
     modelValue: {
@@ -23,7 +23,7 @@ const props = defineProps({
         default: '18px',
     }
 })
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'change'])
 const { proxy } = getCurrentInstance()
 
 onMounted(() => {
@@ -44,22 +44,34 @@ onMounted(() => {
 
     // 初始化vim模式
     initVimMode(editor, proxy.$refs.vim)
+
+    watch(
+        () => props.modelValue,
+        (newVal, _) => {
+            if (newVal != editor.getValue()) {
+                editor.setValue(newVal)
+            }
+        }
+    )
 })
 </script>
 
 <style scoped>
 #editor-container {
-    height: 100%;
+    height: 90%;
     display: flex;
     flex-direction: column;
 
     .editor {
-        height: 100%;
+        flex: 1;
     }
 
     .vim {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
         height: 20px;
-        background-color: #f5f5f5;
+        background-color: var(--color-neutral-2);
     }
 }
 </style>

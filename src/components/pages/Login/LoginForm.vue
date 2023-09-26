@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { VueElement, ref, version } from 'vue';
+import { ref } from 'vue';
 import { Message } from '@arco-design/web-vue';
 import { postLoginByPassword, postLoginByEmail, postSendCaptcha } from '../../../services/user';
 import { useRouter } from 'vue-router';
@@ -48,6 +48,7 @@ const captchaError = ref(false)
 const btnSendCaptchaText = ref('发送验证码')
 
 function login() {
+    let token = '';
     if (activeKey.value === '1') {
         // 输入校验
         usernameError.value = !validateNotEmpty(username.value, '请输入账号')
@@ -58,8 +59,9 @@ function login() {
             if (res.status_code !== constStore.CodeSuccess.code) {
                 Message.error(res.status_msg)
             } else {
+                token = res.token
                 authStore.token = res.token
-                console.log(authStore);
+                localStorage.setItem('token', res.token)
                 router.push('/')
             }
         })
@@ -74,8 +76,9 @@ function login() {
             if (res.status_code !== constStore.CodeSuccess.code) {
                 Message.error(res.status_msg)
             } else {
+                token = res.token
                 authStore.token = res.token
-                console.log(authStore);
+                localStorage.setItem('token', res.token)
                 router.push('/')
             }
         })

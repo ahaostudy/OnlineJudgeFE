@@ -49,6 +49,7 @@ function register() {
             Message.error(res.status_msg)
         } else {
             authStore.token = res.token
+            localStorage.setItem('token', res.token)
             router.push('/')
         }
     })

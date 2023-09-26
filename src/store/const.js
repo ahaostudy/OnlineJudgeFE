@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { computed } from 'vue'
 
 export const useConstStore = defineStore('const', () => {
     const CodeSuccess = { code: 1000, msg: "success" }
@@ -21,6 +22,39 @@ export const useConstStore = defineStore('const', () => {
     const CodeForbidden = { code: 3001, msg: "权限不足" }
     const CodeServerBusy = { code: 4001, msg: "服务繁忙" }
 
+    const Languages = ['C++', 'C', 'Python', 'Java', 'Golang']
+    const LanguageSuffixs = ['cpp', 'c', 'py', 'java', 'go']
+
+    const StatusAccepted = 10
+    const StatusFinished = 11
+    const StatusRunning = 12
+    const StatusCompileError = 20
+    const StatusRuntimeError = 21
+    const StatusWrongAnswer = 22
+    const StatusTimeLimitExceeded = 23
+    const StatusMemoryLimitExceeded = 24
+    const StatusOutputLimitExceeded = 25
+    const StatusServerFailed = 30
+    const StatusHide = 0
+
+    const Status = new Array();
+    Status[StatusAccepted] = { status: 'Accepted', type: 'success' }
+    Status[StatusFinished] = { status: 'Finished', type: 'success' }
+    Status[StatusRunning] = { status: 'Running', type: 'normal' }
+    Status[StatusCompileError] = { status: 'Compile Error', type: 'error' }
+    Status[StatusRuntimeError] = { status: 'Runtime Error', type: 'error' }
+    Status[StatusWrongAnswer] = { status: 'Wrong Answer', type: 'error' }
+    Status[StatusTimeLimitExceeded] = { status: 'Time Limit Exceeded', type: 'error' }
+    Status[StatusMemoryLimitExceeded] = { status: 'Memory Limit Exceeded', type: 'error' }
+    Status[StatusOutputLimitExceeded] = { status: 'Output Limit Exceeded', type: 'error' }
+    Status[StatusServerFailed] = { status: 'Server Failed', type: 'error' }
+    Status[StatusHide] = { status: '', type: 'normal' }
+
+    const GetStatus = computed(() => (code) => {
+        if (code in Status) return Status[code]
+        return { status: 'Server Failed', type: 'error' }
+    })
+
     return {
         CodeSuccess,
         CodeInvalidParams,
@@ -40,6 +74,23 @@ export const useConstStore = defineStore('const', () => {
         CodeContestNotExist,
         CodeContestNotOngoing,
         CodeForbidden,
-        CodeServerBusy
+        CodeServerBusy,
+
+        Languages,
+        LanguageSuffixs,
+
+        StatusAccepted,
+        StatusFinished,
+        StatusRunning,
+        StatusCompileError,
+        StatusRuntimeError,
+        StatusWrongAnswer,
+        StatusTimeLimitExceeded,
+        StatusMemoryLimitExceeded,
+        StatusOutputLimitExceeded,
+        StatusServerFailed,
+        StatusHide,
+        Status,
+        GetStatus
     }
 })

@@ -13,6 +13,12 @@ const instance = axios.create({
 
 instance.interceptors.request.use(
     (config) => {
+        if (authStore.token.length == 0) {
+            const token = localStorage.getItem('token')
+            if (token && token.length > 0) {
+                authStore.token = token
+            }
+        }
         config.headers.Authorization = "Bearer " + authStore.token;
         return config;
     },
