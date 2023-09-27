@@ -1,7 +1,11 @@
-# Vue 3 + Vite
+# GDUPT Online Judge 前端
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+### 项目截图
 
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+#### 登录页面
+![1](./public/image/1.png)
+#### 题库页面
+![2](./public/image/2.png)
+#### 题目页面
+![3](./public/image/3.png)
+![4](./public/image/4.png)
