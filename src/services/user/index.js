@@ -1,4 +1,4 @@
-import { post } from '../api';
+import { get, post } from '../api';
 
 export function postLoginByPassword(username, password) {
     return post('/user/login', {
@@ -27,4 +27,8 @@ export function postSendCaptcha(email) {
     return post('/user/captcha', {
         email: email
     })
+}
+
+export function getUser(id) {
+    return get('/user/' + id)
 }

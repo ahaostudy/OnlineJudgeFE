@@ -1,3 +1,4 @@
+import { Message } from '@arco-design/web-vue'
 import { createRouter, createWebHistory } from 'vue-router'
 const Index = () => import('../views/Index.vue')
 const Login = () => import('../views/Login.vue')
@@ -7,7 +8,7 @@ const Problem = () => import('../views/Problem.vue')
 const routes = [
     {
         path: '/',
-        component: Index
+        component: Problems,
     },
     {
         path: '/problems',
@@ -20,6 +21,7 @@ const routes = [
     {
         path: '/problem/:id',
         component: Problem
+
     }
 ]
 

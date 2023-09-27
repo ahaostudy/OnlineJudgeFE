@@ -1,25 +1,24 @@
 import axios from 'axios';
-import { useAuthStore } from '../../store/auth';
 import router from '../../router';
 import { Message } from '@arco-design/web-vue';
 
-const authStore = useAuthStore();
+const baseHost = 'http://192.168.1.67:8080';
+const baseURI = '/api/v1'
+
+export const BaseHost = baseHost;
+export const BaseURI = baseURI;
 
 const instance = axios.create({
     baseURL: '/api',
     timeout: 5000,
 });
 
-
 instance.interceptors.request.use(
     (config) => {
-        if (authStore.token.length == 0) {
-            const token = localStorage.getItem('token')
-            if (token && token.length > 0) {
-                authStore.token = token
-            }
-        }
-        config.headers.Authorization = "Bearer " + authStore.token;
+        let token = localStorage.getItem('token');
+        if (!token) token = '';
+
+        config.headers.Authorization = "Bearer " + token;
         return config;
     },
     (error) => {
@@ -32,6 +31,9 @@ instance.interceptors.response.use(
         return response;
     },
     (error) => {
+        if (!error.response) {
+            return Promise.reject(error);
+        }
         if (error.response.status === 401) {
             Message.error('请先登录账号');
             router.push('/login');

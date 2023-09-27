@@ -1,11 +1,22 @@
 <template>
     <div id="table-container">
         <div class="table">
-            <a-table :columns="columns" :data="problems" :pagination="false" :loading="loading"
-                @row-click="pushProblemDetail" />
+            <a-table :columns="columns" :data="problems" :pagination="false" :loading="loading" :bordered="false"
+                :stripe="true" :hoverable="false">
+                <template #title="{ record }">
+                    <a-typography-text @click="pushProblemDetail(record.id)" class="title">{{ record.title
+                    }}</a-typography-text>
+                </template>
+                <template #difficulty="{ record }">
+                    <a-typography-text :type="['success', 'warning', 'danger'][record.difficulty]">
+                        {{ record.difficultyText }}
+                    </a-typography-text>
+                </template>
+            </a-table>
         </div>
         <div class="pagination">
-            <a-pagination :total="total" :current="current" :page-size="pageSize" @change="change"></a-pagination>
+            <a-pagination :total="total" :current="current" :page-size="pageSize" @change="change" :show-page-size="true"
+                :show-total="true" @page-size-change="pageSizeChange" />
         </div>
     </div>
 </template>
@@ -25,19 +36,24 @@ const constStore = useConstStore();
 const columns = [
     { title: '状态', dataIndex: 'status' },
     { title: '序号', dataIndex: 'id' },
-    { title: '题目', dataIndex: 'title' },
+    { title: '题目', slotName: 'title' },
     { title: '通过率', dataIndex: '' },
-    { title: '难度', dataIndex: 'difficulty' },
+    { title: '难度', slotName: 'difficulty' },
 ];
 
 const problems = reactive([]);
 const current = ref(1)
-const pageSize = ref(20)
+const pageSize = ref(50)
 const total = ref(0)
 const loading = ref(false)
 
 const change = function (number) {
     updateProblems(number)
+}
+
+const pageSizeChange = function (size) {
+    pageSize.value = size
+    updateProblems(1)
 }
 
 function updateProblems(page) {
@@ -46,7 +62,7 @@ function updateProblems(page) {
         problems.splice(0)
         for (let p of res.problem_list) {
             p['key'] = p['id'];
-            p['difficulty'] = problemStore.difficulty[p['difficulty']];
+            p['difficultyText'] = problemStore.difficulty[p['difficulty']];
             problems.push(p);
         }
         loading.value = false
@@ -54,9 +70,8 @@ function updateProblems(page) {
     })
 }
 
-function pushProblemDetail(record) {
-    console.log("push problem detail:", record.id)
-    router.push('/problem/' + record.id)
+function pushProblemDetail(id) {
+    router.push('/problem/' + id)
 }
 
 onMounted(() => {
@@ -78,9 +93,42 @@ onMounted(() => {
     flex-direction: column;
     gap: 20px;
 
+    .table {
+
+        .title {
+            cursor: pointer;
+        }
+
+        .title:hover {
+            color: rgb(var(--primary-6));
+        }
+    }
+
     .pagination {
         display: flex;
         justify-content: end;
     }
+}
+</style>
+
+<style>
+#table-container .arco-table-th {
+    background-color: var(--color-neutral-0);
+}
+
+#table-container .arco-table-stripe:not(.arco-table-dragging) .arco-table-tr:not(.arco-table-tr-empty):not(.arco-table-tr-summary):nth-child(even) .arco-table-td:not(.arco-table-col-fixed-left):not(.arco-table-col-fixed-right),
+#table-container .arco-table-stripe .arco-table-tr-drag .arco-table-td:not(.arco-table-col-fixed-left):not(.arco-table-col-fixed-right) {
+    background-color: var(--color-neutral-1);
+
+}
+
+#table-container tr,
+#table-container td {
+    border: none;
+}
+
+#table-container th {
+    border-bottom: var(--color-neutral-3) 1px solid;
+    color: var(--color-text-3);
 }
 </style>

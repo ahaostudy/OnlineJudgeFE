@@ -12,17 +12,17 @@
         <div class="editor-right-btns">
             <a-tooltip content="运行代码" position="bottom">
                 <a-button type="text" @click="debug">
-                    <icon-play-arrow size="22px" />
+                    <icon-play-arrow size="20px" />
                 </a-button>
             </a-tooltip>
             <a-tooltip content="调试代码（开发中）" position="bottom">
                 <a-button type="text">
-                    <icon-bug size="22px" />
+                    <icon-bug size="20px" />
                 </a-button>
             </a-tooltip>
             <a-tooltip content="提交" position="bottom">
                 <a-button type="text" @click="submit">
-                    <icon-send size="22px" rotate="-90" />
+                    <icon-send size="20px" rotate="-90" />
                 </a-button>
             </a-tooltip>
         </div>
@@ -49,3 +49,14 @@ function submit() {
     emit('submit')
 }
 </script>
+
+<script>
+
+</script>
+
+<style>
+.arco-btn-size-medium {
+    margin-left: 7px;
+    padding: 0 9px;
+}
+</style>

@@ -11,11 +11,11 @@
                         <a-form layout="vertical">
                             <a-form-item label="自测输入">
                                 <a-textarea v-model="props.problem.samples[i].input"
-                                    :auto-size="{ minRows: 1, maxRows: 10 }" @input="changeProblem" />
+                                    :auto-size="{ minRows: 1, maxRows: 20 }" @input="changeProblem" />
                             </a-form-item>
                             <a-form-item label="实际输出">
                                 <a-textarea v-model="props.problem.samples[i].output"
-                                    :auto-size="{ minRows: 1, maxRows: 10 }" @input="changeProblem" />
+                                    :auto-size="{ minRows: 1, maxRows: 20 }" @input="changeProblem" />
                             </a-form-item>
                         </a-form>
                     </div>

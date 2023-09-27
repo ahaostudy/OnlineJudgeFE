@@ -53,6 +53,13 @@ onMounted(() => {
             }
         }
     )
+
+    watch (
+        () => props.language,
+        (newVal, _) => {
+            monaco.editor.setModelLanguage(editor.getModel(), newVal)
+        }
+    )
 })
 </script>
 
@@ -61,6 +68,7 @@ onMounted(() => {
     height: 90%;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 
     .editor {
         flex: 1;

@@ -23,7 +23,7 @@ export const useConstStore = defineStore('const', () => {
     const CodeServerBusy = { code: 4001, msg: "服务繁忙" }
 
     const Languages = ['C++', 'C', 'Python', 'Java', 'Golang']
-    const LanguageSuffixs = ['cpp', 'c', 'py', 'java', 'go']
+    const LanguageSuffixs = ['cpp', 'c', 'python', 'java', 'go']
 
     const StatusAccepted = 10
     const StatusFinished = 11

@@ -7,12 +7,12 @@
                 </template>
                 <Buttons @debug="debug" @submit="submit" v-model:language="language" @update:language="chagneLanguage">
                 </Buttons>
-                <Editor :language="constStore.LanguageSuffixs[language]" @change="changeCode" v-model="code">
+                <Editor :language="constStore.LanguageSuffixs[language - 1]" @change="changeCode" v-model="code">
                 </Editor>
             </a-tab-pane>
             <a-tab-pane key="2">
                 <template #title>
-                    <icon-file /> 测试样例
+                    <icon-check-square /> 测试样例
                 </template>
                 <Buttons @debug="debug" @submit="submit" v-model:language="language" @update:language="chagneLanguage">
                 </Buttons>
@@ -28,7 +28,7 @@ import Editor from './Editor.vue';
 import Console from './Console.vue';
 import Buttons from './Buttons.vue';
 import { ref } from 'vue';
-import { postDebug } from '../../../services/submit'
+import { postDebug, postSubmit, postGetResult } from '../../../services/submit'
 import { useConstStore } from '../../../store/const';
 import { Message } from '@arco-design/web-vue';
 
@@ -60,26 +60,67 @@ function chagneLanguage(value) {
 function debug() {
     activeKey.value = '2'
     status.value = constStore.StatusRunning
+    stdout.value = ''
 
-    postDebug(code.value, props.problem.samples[sample.value].input, language.value).then(res => {
+    const input = props.problem.samples[sample.value].input
+
+    postDebug(code.value, input, language.value).then(res => {
         if (res.status_code !== constStore.CodeSuccess.code) {
-            Message.error(res.Message)
+            Message.error(res.status_msg)
+            status.value = constStore.StatusServerFailed
             return
         }
         props.problem.samples[sample.value].output = res.result.output
         status.value = res.result.status
-        // 代码错误
-        if (status.value !== constStore.StatusAccepted && status.value !== constStore.StatusAccepted) {
+        if (status.value !== constStore.StatusAccepted && status.value !== constStore.StatusFinished) {
             stdout.value = res.result.error
         } else {
-            stdout.value = `执行时间：${res.result.time} ms  执行内存：${res.result.memory/1024/1024} MB`
+            stdout.value = `执行时间：${res.result.time} ms  执行内存：${res.result.memory / 1024 / 1024} MB`
         }
     })
 }
 
 // 提交代码
 function submit() {
-    console.log('submit')
+    activeKey.value = '2'
+    status.value = constStore.StatusRunning
+    stdout.value = ''
+
+    postSubmit(props.id, code.value, language.value).then(response => {
+        if (response.status_code !== constStore.CodeSuccess.code) {
+            Message.error(response.status_msg)
+            return
+        }
+
+        let maxCount = 8;
+        let interval = 100;
+
+        const exec = () => {
+            if (maxCount === 0) {
+                return;
+            }
+
+            maxCount--;
+            postGetResult(response.submit_id).then(res => {
+                if (res.status_code !== constStore.CodeSuccess.code) {
+                    Message.error(res.status_msg);
+                } else if (res.result.status === constStore.StatusRunning) {
+                    console.log("running_" + (8 - maxCount));
+                    interval *= 1.5;
+                    setTimeout(exec, interval);
+                } else {
+                    status.value = res.result.status;
+                    if (status.value !== constStore.StatusAccepted && status.value !== constStore.StatusFinished) {
+                        stdout.value = res.result.error;
+                    } else {
+                        stdout.value = `最大执行时间：${res.result.time} ms  最大执行内存：${res.result.memory / 1024 / 1024} MB`;
+                    }
+                }
+            });
+        };
+
+        setTimeout(exec, interval);
+    })
 }
 </script>
 
@@ -90,7 +131,7 @@ function submit() {
 
 .editor-btns {
     height: 32px;
-    padding: 10px 20px;
+    padding: 6px 20px;
 
     border-bottom: 1px solid var(--color-neutral-1);
 

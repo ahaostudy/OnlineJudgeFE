@@ -20,11 +20,9 @@ import { Message } from '@arco-design/web-vue';
 import { postRegister, postSendCaptcha } from '../../../services/user';
 import { useRouter } from 'vue-router';
 import { useConstStore } from '../../../store/const';
-import { useAuthStore } from '../../../store/auth';
 
 const router = useRouter();
 const constStore = useConstStore()
-const authStore = useAuthStore()
 
 const email = ref('')
 const password = ref('')
@@ -48,7 +46,6 @@ function register() {
         if (res.status_code !== constStore.CodeSuccess.code) {
             Message.error(res.status_msg)
         } else {
-            authStore.token = res.token
             localStorage.setItem('token', res.token)
             router.push('/')
         }

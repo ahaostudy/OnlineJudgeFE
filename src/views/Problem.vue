@@ -1,9 +1,8 @@
 <template>
     <div id="problem-container">
         <div id="top-container">
-            <a-typography-title :heading="4">
-                {{ id }}. {{ problem.title }}
-            </a-typography-title>
+            <img alt="logo" src="../assets/logo.svg" style="height: 26px" class="btn-index" @click="router.push('/problems')"/>
+            {{ id }}. {{ problem.title }}
         </div>
         <div id="main-container">
             <a-split direction="horizontal" :style="{ height: '100%' }" :default-size="0.2" :min="'400px'">
@@ -24,9 +23,10 @@
 import Info from '../components/pages/Problem/Info.vue'
 import Work from '../components/pages/Problem/Work.vue'
 import { ref, reactive } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute();
+const router = useRouter();
 
 const id = ref(route.params.id)
 const problem = reactive({
@@ -46,18 +46,32 @@ function getProblem(p) {
 
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     gap: 10px;
     background-color: var(--color-neutral-1);
+}
 
-    #top-container {
-        padding-left: 40px;
-        background-color: var(--color-bg-1);
-    }
+#top-container {
+    padding: 20px 40px;
 
-    #main-container {
-        flex: 1;
-        background-color: var(--color-bg-1);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    font-size: 20px;
+    background-color: var(--color-bg-1);
+
+    cursor: default;
+
+    .btn-index {
+        cursor: pointer;
     }
+}
+
+#main-container {
+    height: 100%;
+    overflow-y: auto;
+    background-color: var(--color-bg-1);
 }
 </style>
 

@@ -29,11 +29,9 @@ import { Message } from '@arco-design/web-vue';
 import { postLoginByPassword, postLoginByEmail, postSendCaptcha } from '../../../services/user';
 import { useRouter } from 'vue-router';
 import { useConstStore } from '../../../store/const';
-import { useAuthStore } from '../../../store/auth';
 
 const router = useRouter();
 const constStore = useConstStore()
-const authStore = useAuthStore()
 
 const activeKey = ref('1')
 const username = ref('')
@@ -59,8 +57,6 @@ function login() {
             if (res.status_code !== constStore.CodeSuccess.code) {
                 Message.error(res.status_msg)
             } else {
-                token = res.token
-                authStore.token = res.token
                 localStorage.setItem('token', res.token)
                 router.push('/')
             }
@@ -76,8 +72,6 @@ function login() {
             if (res.status_code !== constStore.CodeSuccess.code) {
                 Message.error(res.status_msg)
             } else {
-                token = res.token
-                authStore.token = res.token
                 localStorage.setItem('token', res.token)
                 router.push('/')
             }
