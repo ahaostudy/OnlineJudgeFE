@@ -15,7 +15,6 @@
                 <a-menu-item key="3">竞赛</a-menu-item>
                 <a-menu-item key="4">校队</a-menu-item>
             </a-menu>
-
         </div>
         <ul class="right-side">
             <li class="btn" @click="router.push('/login')" v-show="!logined">
@@ -49,10 +48,11 @@ import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getUser } from '../../services/user'
 import { useConstStore } from '../../store/const';
-import { BaseHost } from '../../services/api/instance';
+import { Config } from '../../../config.js';
 
 const router = useRouter()
 const constStore = useConstStore()
+const baseHost = Config.BASE_HOST
 
 const logined = ref(false)
 const user = reactive({
@@ -74,7 +74,7 @@ onMounted(() => {
             for (let key in res.user) {
                 user[key] = res.user[key]
             }
-            user.avatar = BaseHost + res.user.avatar
+            user.avatar = baseHost + res.user.avatar
         })
     }
 })

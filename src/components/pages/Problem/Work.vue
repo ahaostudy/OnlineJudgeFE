@@ -5,6 +5,7 @@
                 <template #title>
                     <icon-code /> 代码
                 </template>
+
                 <Buttons @debug="debug" @submit="submit" v-model:language="language" @update:language="chagneLanguage">
                 </Buttons>
                 <Editor :language="constStore.LanguageSuffixs[language - 1]" @change="changeCode" v-model="code">
@@ -19,7 +20,26 @@
                 <Console v-model:problem="props.problem" v-model:sample="sample" :status="status" :stdout="stdout">
                 </Console>
             </a-tab-pane>
+            <a-tab-pane key="3" :style="{ overflowY: 'auto' }">
+                <template #title>
+                    <icon-history /> 提交记录
+                </template>
+                <SubmitRecord :id="props.id"></SubmitRecord>
+            </a-tab-pane>
         </a-tabs>
+        <a-button type="primary" :shape="popup ? 'round' : 'circle'" class="button-trigger" v-on:mouseenter="popup = !popup"
+            v-on:mouseleave="popup = !popup" @click="showGPT = true">
+            <icon-robot size="18px" />{{ popup ? '&nbsp;智能助手' : '' }}
+        </a-button>
+        <a-drawer :width="'40%'" :visible="showGPT" @cancel="showGPT = false" :footer="false" unmountOnClose>
+            <template #title>
+                <a-typography-title :heading="6">
+                    <icon-robot /> 智能助手
+                </a-typography-title>
+            </template>
+            <Chat></Chat>
+        </a-drawer>
+
     </div>
 </template>
 
@@ -31,6 +51,8 @@ import { ref } from 'vue';
 import { postDebug, postSubmit, postGetResult } from '../../../services/submit'
 import { useConstStore } from '../../../store/const';
 import { Message } from '@arco-design/web-vue';
+import SubmitRecord from './SubmitRecord.vue';
+import Chat from './Chat.vue';
 
 const props = defineProps({
     id: { require: true },
@@ -44,6 +66,8 @@ const sample = ref(0)
 const status = ref(constStore.StatusHide)
 const stdout = ref('')
 const code = ref(localStorage.getItem(`code-${props.id}-${language.value}`) || '')
+const popup = ref(false)
+const showGPT = ref(false)
 
 // 实时保存代码
 function changeCode(val) {
@@ -137,6 +161,14 @@ function submit() {
 
     display: flex;
     justify-content: space-between;
+}
+
+.button-trigger {
+    position: absolute;
+    right: 80px;
+    bottom: 80px;
+    cursor: pointer;
+    transition: all 0.1s;
 }
 </style>
 

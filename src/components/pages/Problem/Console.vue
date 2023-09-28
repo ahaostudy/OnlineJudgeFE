@@ -40,7 +40,6 @@ import { useConstStore } from '../../../store/const';
 
 const emit = defineEmits(['update:problem', 'update:sample'])
 const constStore = useConstStore()
-console.log(constStore.GetStatus(constStore.StatusRunning))
 
 const props = defineProps({
     problem: {

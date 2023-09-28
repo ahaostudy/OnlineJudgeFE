@@ -7,11 +7,11 @@
                     <a-typography-text @click="pushProblemDetail(record.id)" class="title">{{ record.title
                     }}</a-typography-text>
                 </template>
-                <template #difficulty="{ record }">
+                <!-- <template #difficulty="{ record }">
                     <a-typography-text :type="['success', 'warning', 'danger'][record.difficulty]">
                         {{ record.difficultyText }}
                     </a-typography-text>
-                </template>
+                </template> -->
             </a-table>
         </div>
         <div class="pagination">
@@ -38,7 +38,7 @@ const columns = [
     { title: '序号', dataIndex: 'id' },
     { title: '题目', slotName: 'title' },
     { title: '通过率', dataIndex: '' },
-    { title: '难度', slotName: 'difficulty' },
+    { title: '难度', dataIndex: 'difficultyText' },
 ];
 
 const problems = reactive([]);
@@ -113,7 +113,7 @@ onMounted(() => {
 
 <style>
 #table-container .arco-table-th {
-    background-color: var(--color-neutral-0);
+    background-color: var(--color-bg-1);
 }
 
 #table-container .arco-table-stripe:not(.arco-table-dragging) .arco-table-tr:not(.arco-table-tr-empty):not(.arco-table-tr-summary):nth-child(even) .arco-table-td:not(.arco-table-col-fixed-left):not(.arco-table-col-fixed-right),

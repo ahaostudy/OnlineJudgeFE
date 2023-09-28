@@ -2,12 +2,6 @@ import axios from 'axios';
 import router from '../../router';
 import { Message } from '@arco-design/web-vue';
 
-const baseHost = 'http://192.168.1.67:8080';
-const baseURI = '/api/v1'
-
-export const BaseHost = baseHost;
-export const BaseURI = baseURI;
-
 const instance = axios.create({
     baseURL: '/api',
     timeout: 5000,

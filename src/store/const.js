@@ -51,8 +51,8 @@ export const useConstStore = defineStore('const', () => {
     Status[StatusHide] = { status: '', type: 'normal' }
 
     const GetStatus = computed(() => (code) => {
-        if (code in Status) return Status[code]
-        return { status: 'Server Failed', type: 'error' }
+        if (code in Status) return { status: Status[code].status, type: Status[code].type, code: code }
+        return { status: 'Server Failed', type: 'error', code: code }
     })
 
     return {

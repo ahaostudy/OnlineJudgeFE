@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite';
 import { ArcoResolver } from 'unplugin-vue-components/resolvers';
-import { BaseHost, BaseURI } from './src/services/api/instance';
+import { Config } from './config';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -25,7 +25,7 @@ export default defineConfig({
     port: 9999,
     proxy: {
       '/api': {
-        target: BaseHost + BaseURI,
+        target: Config.BASE_HOST + Config.BASE_URI,
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       }

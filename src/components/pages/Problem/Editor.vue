@@ -54,7 +54,7 @@ onMounted(() => {
         }
     )
 
-    watch (
+    watch(
         () => props.language,
         (newVal, _) => {
             monaco.editor.setModelLanguage(editor.getModel(), newVal)
