@@ -8,4 +8,9 @@
 ![2](./public/image/2.png)
 #### 题目页面
 ![3](./public/image/3.png)
+#### 控制台
 ![4](./public/image/4.png)
+#### 提交记录
+![5](./public/image/5.png)
+#### 智能助手
+![6](./public/image/6.png)
