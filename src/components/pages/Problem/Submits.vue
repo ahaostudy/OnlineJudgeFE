@@ -1,7 +1,13 @@
 <template>
     <a-split :style="{ height: '100%' }" :default-size="0.65">
         <template #first>
-            <v-md-preview :text="submitInfo" />
+            <a-skeleton :style="{ padding: '40px' }" :animation="true" v-show="loading">
+                <a-space direction="vertical" :style="{ width: '100%' }" size="large">
+                    <a-skeleton-line :rows="6" :line-height="28" :line-spacing="22"
+                        :widths="['20%', '60%', '30%', '90%', '90%', '90%']" />
+                </a-space>
+            </a-skeleton>
+            <v-md-preview :text="submitInfo" v-show="!loading" />
         </template>
         <template #second>
             <div class="table-top">
@@ -86,12 +92,8 @@ const columns = reactive([
 ])
 
 const submits = reactive([])
-
 const submitInfo = ref('')
-
-onMounted(() => {
-    flushTable()
-})
+const loading = ref(true)
 
 function flushTable() {
     submits.splice(0)
@@ -102,7 +104,7 @@ function flushTable() {
             return
         }
 
-        const errors = [constStore.StatusCompileError, constStore.StatusRuntimeError]
+        const errors = [constStore.StatusCompileError, constStore.StatusRuntimeError, constStore.StatusWrongAnswer]
         const warnings = [constStore.StatusTimeLimitExceeded, constStore.StatusMemoryLimitExceeded, constStore.StatusOutputLimitExceeded]
         for (let s of res.submit_list) {
             s['key'] = s['id']
@@ -110,8 +112,6 @@ function flushTable() {
             s['language'] = constStore.Languages[s['lang_id'] - 1]
 
             s['status'] = constStore.GetStatus(s['status'])
-
-            console.log(s['status']);
 
             if (errors.indexOf(s['status'].code) !== -1) s['status'].color = 'red'
             else if (warnings.indexOf(s['status'].code) !== -1) s['status'].color = 'orange'
@@ -133,26 +133,27 @@ function flushTable() {
 }
 
 function selectSubmit(record) {
+    loading.value = true
+
     getSubmit(record.id).then(res => {
         if (res.status_code !== constStore.CodeSuccess.code) {
             Message.error(res.status_msg)
             return
         }
         const submit = res.submit
-        submitInfo.value = `
-# ${record.language}
-
-执行用时：${submit.time} ms &nbsp;&nbsp;&nbsp; 执行内存：${(submit.memory / 1024 / 1024).toFixed(1)} MB
-
-### ${record.status.status}
-
-\`\`\` ${constStore.LanguageSuffixs[submit.lang_id - 1]}
-${submit.code}
-\`\`\`
-    `
+        submitInfo.value = `## ${record.status.status}\n` +
+            `执行用时：${submit.time} ms &nbsp;&nbsp;&nbsp; 执行内存：${(submit.memory / 1024 / 1024).toFixed(1)} MB\n` +
+            `### ${record.language}\n` +
+            "``` " + constStore.LanguageSuffixs[submit.lang_id - 1] + "\n" +
+            `${submit.code}\n` +
+            "```"
+        loading.value = false
     })
 }
 
+onMounted(() => {
+    flushTable()
+})
 </script>
 
 <style scoped>

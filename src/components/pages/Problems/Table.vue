@@ -3,15 +3,27 @@
         <div class="table">
             <a-table :columns="columns" :data="problems" :pagination="false" :loading="loading" :bordered="false"
                 :stripe="true" :hoverable="false">
+                <template #is_accepted="{ record }">
+                    <icon-check-circle :strokeWidth="5" size="18px" v-show="record.is_accepted"
+                        :style="{ color: '#00b42a' }" />
+                </template>
                 <template #title="{ record }">
-                    <a-typography-text @click="pushProblemDetail(record.id)" class="title">{{ record.title
-                    }}</a-typography-text>
+                    <a-typography-text @click="pushProblemDetail(record.id)" class="title">
+                        {{ record.title }}
+                    </a-typography-text>
                 </template>
                 <!-- <template #difficulty="{ record }">
                     <a-typography-text :type="['success', 'warning', 'danger'][record.difficulty]">
                         {{ record.difficultyText }}
                     </a-typography-text>
                 </template> -->
+                <template #submit_status="{ record }">
+                    <a-progress size="mini" v-if="record.submit_count"
+                        :percent="record.accepted_count / record.submit_count" />
+                    <a-progress size="mini" v-else
+                        :percent="record.submit_count ? record.accepted_count / record.submit_count : 0" status="danger" />
+                    {{ record.submit_status }}
+                </template>
             </a-table>
         </div>
         <div class="pagination">
@@ -34,10 +46,10 @@ const problemStore = useProblemStore();
 const constStore = useConstStore();
 
 const columns = [
-    { title: '状态', dataIndex: 'status' },
+    { title: '状态', slotName: 'is_accepted' },
     { title: '序号', dataIndex: 'id' },
     { title: '题目', slotName: 'title' },
-    { title: '通过率', dataIndex: '' },
+    { title: '提交', slotName: 'submit_status' },
     { title: '难度', dataIndex: 'difficultyText' },
 ];
 
@@ -63,6 +75,7 @@ function updateProblems(page) {
         for (let p of res.problem_list) {
             p['key'] = p['id'];
             p['difficultyText'] = problemStore.difficulty[p['difficulty']];
+            p['submit_status'] = `${p['accepted_count']} / ${p['submit_count']}`
             problems.push(p);
         }
         loading.value = false

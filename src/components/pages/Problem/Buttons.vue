@@ -1,5 +1,5 @@
 <template>
-    <div class="editor-btns">
+    <div id="editor-btns">
         <div class="editor-left-btns">
             <a-select
                 :style="{ width: `${constStore.Languages[language - 1].length * 12 + 42}px`, minWidth: '80px', maxWidth: '120px' }"
@@ -10,6 +10,11 @@
             </a-select>
         </div>
         <div class="editor-right-btns">
+            <!-- <a-tooltip content="VIM模式" position="bottom">
+                <a-button type="text" :style="{fontSize: '18px'}">
+                    vim
+                </a-button>
+            </a-tooltip> -->
             <a-tooltip content="运行代码" position="bottom">
                 <a-button type="text" @click="debug">
                     <icon-play-arrow size="20px" />
@@ -22,7 +27,12 @@
             </a-tooltip>
             <a-tooltip content="提交" position="bottom">
                 <a-button type="text" @click="submit">
-                    <icon-send size="20px" rotate="-90" />
+                    <icon-check size="20px" />
+                </a-button>
+            </a-tooltip>
+            <a-tooltip content="设置（开发中）" position="bottom">
+                <a-button type="text">
+                    <icon-settings size="20px" />
                 </a-button>
             </a-tooltip>
         </div>
@@ -50,12 +60,25 @@ function submit() {
 }
 </script>
 
-<script>
+<style scoped lang="less">
+#editor-btns {
+    height: 32px;
+    padding: 6px 20px;
 
-</script>
+    border-bottom: 1px solid var(--color-neutral-1);
+
+    display: flex;
+    justify-content: space-between;
+
+    .editor-right-btns {
+        display: flex;
+        align-items: center;
+    }
+}
+</style>
 
 <style>
-.arco-btn-size-medium {
+#editor-btns .arco-btn-size-medium {
     margin-left: 7px;
     padding: 0 9px;
 }

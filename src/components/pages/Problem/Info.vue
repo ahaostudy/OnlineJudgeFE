@@ -65,7 +65,6 @@ onMounted(() => {
         emit('get-problem', res.problem)
     })
 })
-
 </script>
 
 <style scoped lang="less">

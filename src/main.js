@@ -22,11 +22,15 @@ import hljs from 'highlight.js';
 
 // katex
 import createKatexPlugin from '@kangc/v-md-editor/lib/plugins/katex/cdn';
+// copy-code
+import createCopyCodePlugin from '@kangc/v-md-editor/lib/plugins/copy-code/index';
+import '@kangc/v-md-editor/lib/plugins/copy-code/copy-code.css';
 
 VMdPreview.use(githubTheme, {
     Hljs: hljs,
 });
 VMdPreview.use(createKatexPlugin());
+VMdPreview.use(createCopyCodePlugin());
 
 const app = createApp(App)
 

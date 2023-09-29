@@ -33,13 +33,24 @@
                         <template #extra>
                             <a-link>更多</a-link>
                         </template>
-                        <a-empty />
+                        <a-table :columns="latest_submits_columns" :data="latest_submits" :pagination="false"
+                            :bordered="false">
+                            <template #submit_time="{ record }">
+                                <a-typography-text :style="{ fontSize: '12px' }">{{ record.submit_time
+                                }}</a-typography-text>
+                            </template>
+                            <template #status="{ record }">
+                                <icon-check-circle :strokeWidth="5" size="18px" v-if="record.status"
+                                    :style="{ color: '#00b42a' }" />
+                                <icon-close-circle :strokeWidth="5" size="18px" v-else :style="{ color: '#f53f3f' }" />
+                            </template>
+                        </a-table>
                     </a-card>
                     <a-card title="推荐题单" class="card">
                         <template #extra>
                             <a-link>更多</a-link>
                         </template>
-                        <a-empty />
+                        <a-table :pagination="false" :bordered="false" />
                     </a-card>
                 </div>
             </a-col>
@@ -48,17 +59,46 @@
 </template>
 
 <script setup>
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted } from 'vue';
 import Navbar from "../components/common/Navbar.vue";
 import Table from "../components/pages/Problems/Table.vue";
+import { getLatestSubmits } from "../services/submit";
+import { useConstStore } from '../store/const';
+
+const constStore = useConstStore()
 
 const labels = reactive([])
 const difficulty = ref()
+
+const latest_submits_columns = reactive([
+    { title: '题目', dataIndex: 'problem_id' },
+    { title: '提交时间', slotName: 'submit_time' },
+    { title: '状态', slotName: 'status' },
+])
+const latest_submits = reactive([])
 
 function change(value) {
     labels.splice(0, labels.length)
     labels.push(...value)
 }
+
+onMounted(() => {
+    getLatestSubmits(8).then(res => {
+        if (res.status_code !== constStore.CodeSuccess.code) {
+            Message.error(res.status_msg);
+            return
+        }
+
+        console.log(res);
+        for (let s of res.submit_list) {
+            s['key'] = s['id']
+            s['submit_time'] = new Date(s['created_at']).toLocaleString()
+            s['status'] = s['status'] === constStore.StatusAccepted
+            latest_submits.push(s)
+        }
+        console.log(latest_submits);
+    })
+})
 </script>
 
 <style scoped lang="less">
@@ -99,7 +139,7 @@ function change(value) {
         display: flex;
         flex-direction: column;
         gap: 20px;
-        
+
         padding: 20px 0;
 
         .card {
@@ -107,5 +147,20 @@ function change(value) {
         }
     }
 
+}
+</style>
+
+<style>
+#problems-container .arco-card-body {
+    padding: 0;
+}
+
+#problems-container .arco-table-th {
+    background-color: var(--color-bg-1);
+}
+
+#problems-container th {
+    border-bottom: var(--color-neutral-3) 1px solid;
+    color: var(--color-text-3);
 }
 </style>

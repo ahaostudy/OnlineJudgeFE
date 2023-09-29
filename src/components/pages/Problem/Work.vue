@@ -24,20 +24,20 @@
                 <template #title>
                     <icon-history /> 提交记录
                 </template>
-                <SubmitRecord :id="props.id"></SubmitRecord>
+                <Submits :id="props.id"></Submits>
             </a-tab-pane>
         </a-tabs>
         <a-button type="primary" :shape="popup ? 'round' : 'circle'" class="button-trigger" v-on:mouseenter="popup = !popup"
             v-on:mouseleave="popup = !popup" @click="showGPT = true">
             <icon-robot size="18px" />{{ popup ? '&nbsp;智能助手' : '' }}
         </a-button>
-        <a-drawer :width="'40%'" :visible="showGPT" @cancel="showGPT = false" :footer="false" unmountOnClose>
+        <a-drawer :width="'32%'" :visible="showGPT" @cancel="showGPT = false" :footer="false" unmountOnClose>
             <template #title>
                 <a-typography-title :heading="6">
                     <icon-robot /> 智能助手
                 </a-typography-title>
             </template>
-            <Chat></Chat>
+            <Chat :code="code" :problem="props.problem"></Chat>
         </a-drawer>
 
     </div>
@@ -50,8 +50,8 @@ import Buttons from './Buttons.vue';
 import { ref } from 'vue';
 import { postDebug, postSubmit, postGetResult } from '../../../services/submit'
 import { useConstStore } from '../../../store/const';
-import { Message } from '@arco-design/web-vue';
-import SubmitRecord from './SubmitRecord.vue';
+import { Message, Notification } from '@arco-design/web-vue';
+import Submits from './Submits.vue';
 import Chat from './Chat.vue';
 
 const props = defineProps({
@@ -139,6 +139,10 @@ function submit() {
                     } else {
                         stdout.value = `最大执行时间：${res.result.time} ms  最大执行内存：${res.result.memory / 1024 / 1024} MB`;
                     }
+                    Notification[constStore.GetStatus(status.value).type]({
+                        title: constStore.GetStatus(status.value).status,
+                        closable: true,
+                    })
                 }
             });
         };
@@ -151,16 +155,6 @@ function submit() {
 <style scoped lang="less">
 #work-container {
     height: 100%;
-}
-
-.editor-btns {
-    height: 32px;
-    padding: 6px 20px;
-
-    border-bottom: 1px solid var(--color-neutral-1);
-
-    display: flex;
-    justify-content: space-between;
 }
 
 .button-trigger {

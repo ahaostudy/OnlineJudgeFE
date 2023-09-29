@@ -35,3 +35,9 @@ export function getSubmits(problemID) {
 export function getSubmit(id) {
     return get("/submit/" + id)
 }
+
+export function getLatestSubmits(count) {
+    return get("/submit/latest", {
+        count,
+    })
+}
