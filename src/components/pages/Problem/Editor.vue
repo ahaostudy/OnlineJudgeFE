@@ -43,7 +43,7 @@ onMounted(() => {
     });
 
     // 初始化vim模式
-    initVimMode(editor, proxy.$refs.vim)
+    // initVimMode(editor, proxy.$refs.vim)
 
     watch(
         () => props.modelValue,

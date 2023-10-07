@@ -14,8 +14,15 @@
                         </span>
                     </template>
                     <template #extra>
+                        <a-tooltip content="删除" position="br">
+                            <a-button type="text" @click="removeMsg(i)">
+                                <template #icon>
+                                    <icon-delete />
+                                </template>
+                            </a-button>
+                        </a-tooltip>
                         <a-tooltip content="重新生成" position="br" v-if="msg.role == 'assistant'">
-                            <a-button type="text">
+                            <a-button type="text" @click="reSend(i)">
                                 <template #icon>
                                     <icon-sync />
                                 </template>
@@ -37,7 +44,8 @@
             <a-button :style="{ height: '46px', width: '96px', borderRadius: '6px' }" @click="clearMsgs">
                 CLEAR
             </a-button>
-            <a-textarea placeholder="请输入问题…" auto-size @keyup="send" v-model="input" />
+            <a-textarea auto-size @keyup="send" v-model="input" :disabled="receiving"
+                :placeholder="receiving ? '正在回复…' : '请输入问题…'" />
         </div>
     </div>
 </template>
@@ -47,6 +55,7 @@ import { Message } from '@arco-design/web-vue';
 import { ref, reactive } from 'vue';
 
 const input = ref('')
+const receiving = ref(false)
 
 const props = defineProps({
     code: {
@@ -91,73 +100,92 @@ const messages = reactive([
     ...localMsgs ? JSON.parse(localMsgs) : []
 ])
 
+function removeMsg(idx) {
+    messages.splice(idx, 1)
+    saveMsgs()
+}
+
 async function send(event) {
     if (event.key === 'Enter' && event.ctrlKey) {
         messages.push({ role: 'user', content: input.value })
         input.value = ''
+
         saveMsgs()
-
-        const token = localStorage.getItem('token');
-        const authorization = token ? "Bearer " + token : '';
-
-        fetch('/api/chat', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': authorization,
-            },
-            body: JSON.stringify({ messages }),
-        }).then(response => {
-            const idx = messages.length
-            messages.push({ role: 'assistant', content: '' })
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder('utf-8');
-
-            function processStreamResult(result) {
-                const chunk = decoder.decode(result.value, { stream: !result.done });
-                // chunk:
-                // ```
-                // event:msg
-                // data:hello
-                // 
-                // event:msg
-                // data:hello
-                //
-                // ```
-
-                // 解析chunk
-                chunk.split('event:').forEach((group) => {
-                    group = group.slice(0, -2)
-                    const msgs = group.split('\ndata:')
-
-                    if (msgs.length < 2) {
-                        return
-                    }
-
-                    if (msgs[0] === 'error') {
-                        Message.error(msgs[1])
-                        return
-                    }
-
-                    messages[idx].content += msgs[1]
-                    for (let i = 2; i < msgs.length; i++) {
-                        if (msgs[i] === '') messages[idx].content += '\n'
-                    }
-                })
-
-                if (!result.done) {
-                    reader.read().then(processStreamResult);
-                } else {
-                    saveMsgs()
-                    console.log(messages[idx].content);
-                }
-            }
-
-            reader.read().then(processStreamResult);
-        })
-
+        sendMsg(-1)
     }
+}
+
+async function reSend(idx) {
+    messages.splice(idx + 1)
+    messages[idx].content = ''
+    saveMsgs()
+    sendMsg(Number(idx))
+}
+
+async function sendMsg(idx) {
+    const token = localStorage.getItem('token');
+    const authorization = token ? "Bearer " + token : '';
+    receiving.value = true;
+
+    fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': authorization,
+        },
+        body: JSON.stringify({ messages }),
+    }).then(response => {
+        if (idx === -1) {
+            idx = messages.length
+            messages.push({ role: 'assistant', content: '' })
+        }
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder('utf-8');
+
+        function processStreamResult(result) {
+            const chunk = decoder.decode(result.value, { stream: !result.done });
+            // chunk:
+            // ```
+            // event:msg
+            // data:hello
+            // 
+            // event:msg
+            // data:hello
+            //
+            // ```
+
+            // 解析chunk
+            chunk.split('event:').forEach((group) => {
+                group = group.slice(0, -2)
+                const msgs = group.split('\ndata:')
+
+                if (msgs.length < 2) {
+                    return
+                }
+
+                if (msgs[0] === 'error') {
+                    Message.error(msgs[1])
+                    return
+                }
+
+                messages[idx].content += msgs[1]
+                for (let i = 2; i < msgs.length; i++) {
+                    if (msgs[i] === '') messages[idx].content += '\n'
+                }
+            })
+
+            if (!result.done) {
+                reader.read().then(processStreamResult);
+            } else {
+                saveMsgs()
+                console.log(messages[idx].content);
+                receiving.value = false;
+            }
+        }
+
+        reader.read().then(processStreamResult);
+    })
 }
 
 function saveMsgs() {

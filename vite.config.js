@@ -22,7 +22,7 @@ export default defineConfig({
   ],
   server: {
     host: '0.0.0.0',
-    port: 9999,
+    port: 9009,
     proxy: {
       '/api': {
         target: Config.BASE_HOST + Config.BASE_URI,

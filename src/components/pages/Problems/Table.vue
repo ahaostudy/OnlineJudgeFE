@@ -1,7 +1,7 @@
 <template>
     <div id="table-container">
         <div class="table">
-            <a-table :columns="columns" :data="problems" :pagination="false" :loading="loading" :bordered="false"
+            <a-table :columns="columns" :data="problems" :pagination="false" :bordered="false"
                 :stripe="true" :hoverable="false">
                 <template #is_accepted="{ record }">
                     <icon-check-circle :strokeWidth="5" size="18px" v-show="record.is_accepted"
@@ -57,7 +57,6 @@ const problems = reactive([]);
 const current = ref(1)
 const pageSize = ref(50)
 const total = ref(0)
-const loading = ref(false)
 
 const change = function (number) {
     updateProblems(number)
@@ -69,7 +68,6 @@ const pageSizeChange = function (size) {
 }
 
 function updateProblems(page) {
-    loading.value = true
     getProblems(page, pageSize.value).then(res => {
         problems.splice(0)
         for (let p of res.problem_list) {
@@ -78,7 +76,6 @@ function updateProblems(page) {
             p['submit_status'] = `${p['accepted_count']} / ${p['submit_count']}`
             problems.push(p);
         }
-        loading.value = false
         current.value = page
     })
 }
