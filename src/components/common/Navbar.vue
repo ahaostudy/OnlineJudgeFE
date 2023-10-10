@@ -51,7 +51,7 @@ import { useConstStore } from '../../store/const';
 
 const router = useRouter()
 const constStore = useConstStore()
-const baseHost = import.meta.env.VITE_API_BASE_HOST
+const staticPath = import.meta.env.VITE_BASE_HOST + import.meta.env.VITE_STATIC_HOST
 
 const logined = ref(false)
 const user = reactive({
@@ -73,7 +73,7 @@ onMounted(() => {
             for (let key in res.user) {
                 user[key] = res.user[key]
             }
-            user.avatar = baseHost + res.user.avatar
+            user.avatar = staticPath + res.user.avatar
             console.log(user.avatar);
         })
     }

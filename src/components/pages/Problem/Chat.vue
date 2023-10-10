@@ -141,7 +141,7 @@ async function sendMsg(idx) {
     const authorization = token ? "Bearer " + token : '';
     receiving.value = true;
 
-    fetch('/api/chat', {
+    fetch(import.meta.env.VITE_BASE_HOST + import.meta.env.VITE_API_URI + '/chat', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
