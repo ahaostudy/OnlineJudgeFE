@@ -48,11 +48,10 @@ import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getUser } from '../../services/user'
 import { useConstStore } from '../../store/const';
-import { Config } from '../../../config.js';
 
 const router = useRouter()
 const constStore = useConstStore()
-const baseHost = Config.BASE_HOST
+const staticPath = import.meta.env.VITE_BASE_HOST + import.meta.env.VITE_STATIC_HOST
 
 const logined = ref(false)
 const user = reactive({
@@ -74,7 +73,8 @@ onMounted(() => {
             for (let key in res.user) {
                 user[key] = res.user[key]
             }
-            user.avatar = baseHost + res.user.avatar
+            user.avatar = staticPath + res.user.avatar
+            console.log(user.avatar);
         })
     }
 })

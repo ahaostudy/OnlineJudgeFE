@@ -1,7 +1,8 @@
 <template>
     <div id="problem-container">
         <div id="top-container">
-            <img alt="logo" src="../assets/logo.svg" style="height: 26px" class="btn-index" @click="router.push('/problems')"/>
+            <img alt="logo" src="../assets/logo.svg" style="height: 26px" class="btn-index"
+                @click="router.push('/problems')" />
             {{ id }}. {{ problem.title }}
         </div>
         <div id="main-container">

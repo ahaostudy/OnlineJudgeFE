@@ -62,8 +62,8 @@ function submit() {
 
 <style scoped lang="less">
 #editor-btns {
-    height: 32px;
-    padding: 6px 20px;
+    height: 28px;
+    padding: 6px;
 
     border-bottom: 1px solid var(--color-neutral-1);
 
