@@ -10,7 +10,7 @@
             `#### 输出描述\n${problem.output_desc}\n` +
             `#### 数据范围\n${problem.data_range}\n` +
             `${samplesText}\n` +
-            `${problem.tips ? '#### 提示\n' + problem.tips : ''}\n`"></v-md-preview>
+            `${problem.tips ? '#### 提示\n' + problem.tips : ''}\n`" ></v-md-preview>
     </div>
 </template>
 
@@ -74,7 +74,7 @@ onMounted(() => {
     .limit {
         margin: 10px 0;
         padding-left: 32px;
-        font-size: 15px;
+        font-size: 13px;
         color: var(--color-text-2);
     }
 }
@@ -83,5 +83,9 @@ onMounted(() => {
 <style>
 #problem-info .github-markdown-body h4 {
     margin: 40px 0 16px;
+}
+
+#problem-info .github-markdown-body {
+    font-size: 14px;
 }
 </style>

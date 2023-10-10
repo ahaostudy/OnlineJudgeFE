@@ -22,21 +22,23 @@
                             </a-button>
                         </a-tooltip>
                         <a-tooltip content="重新生成" position="br" v-if="msg.role == 'assistant'">
-                            <a-button type="text" @click="reSend(i)">
+                            <a-button type="text" @click="reGenerate(i)">
                                 <template #icon>
                                     <icon-sync />
                                 </template>
                             </a-button>
                         </a-tooltip>
                         <a-tooltip content="编辑" position="br" v-else>
-                            <a-button type="text">
+                            <a-button type="text" @click="editing = editing === i ? -1 : i">
                                 <template #icon>
                                     <icon-edit />
                                 </template>
                             </a-button>
                         </a-tooltip>
                     </template>
-                    <v-md-preview :text="msg.content"></v-md-preview>
+                    <v-md-preview :text="msg.content" v-if="editing !== i"></v-md-preview>
+                    <a-textarea :default-value="msg.content" @keyup="reSend($event, i)" v-model="msg.content"
+                        :disabled="receiving" v-else auto-size />
                 </a-card>
             </div>
         </div>
@@ -56,6 +58,7 @@ import { ref, reactive } from 'vue';
 
 const input = ref('')
 const receiving = ref(false)
+const editing = ref(-1)
 
 const props = defineProps({
     code: {
@@ -115,7 +118,18 @@ async function send(event) {
     }
 }
 
-async function reSend(idx) {
+async function reSend(event, idx) {
+    if (event.key === 'Enter' && event.ctrlKey) {
+        editing.value = -1;
+
+        messages.splice(idx + 1)
+
+        saveMsgs()
+        sendMsg(-1)
+    }
+}
+
+async function reGenerate(idx) {
     messages.splice(idx + 1)
     messages[idx].content = ''
     saveMsgs()
