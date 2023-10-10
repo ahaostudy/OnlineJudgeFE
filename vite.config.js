@@ -24,14 +24,7 @@ export default ({ mode }) => {
     ],
     server: {
       host: '0.0.0.0',
-      port: 9009,
-      proxy: {
-        '/api': {
-          target: env.VITE_API_BASE_HOST + env.VITE_API_BASE_URI,
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')
-        }
-      },
+      port: 9009
     }
   })
 }

@@ -3,7 +3,7 @@ import router from '../../router';
 import { Message } from '@arco-design/web-vue';
 
 const instance = axios.create({
-    baseURL: '/api',
+    baseURL: import.meta.env.VITE_API_BASE_HOST + import.meta.env.VITE_API_BASE_URI,
     timeout: 5000,
 });
 
