@@ -21,6 +21,7 @@
 </template>
 
 <script setup>
+import { Message } from '@arco-design/web-vue';
 import Info from '../components/pages/Problem/Info.vue'
 import Work from '../components/pages/Problem/Work.vue'
 import { ref, reactive } from 'vue'
@@ -34,10 +35,16 @@ const problem = reactive({
     title: '',
 })
 
-function getProblem(p) {
+function getProblem(p, ok) {
+    if (!ok) {
+        router.push("/problems");
+        Message.error(`题目${id.value}不存在`)
+        return
+    }
     for (let key in p) {
         problem[key] = p[key]
     }
+    console.log(problem);
 }
 </script>
 

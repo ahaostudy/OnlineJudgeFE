@@ -24,9 +24,11 @@
         </template>
         <template #second>
             <a-typography-paragraph>
-                <div id=result>
-                    <a-alert :type="constStore.GetStatus(props.status).type" :title="constStore.GetStatus(props.status).status" v-show="constStore.GetStatus(props.status).status.length">
-                        <div v-html="props.stdout.replaceAll('\n', '<br>').replaceAll(' ', '&ensp;')"></div>
+                <div id=result v-for="(_, i) in props.problem.samples" v-show="props.sample == i">
+                    <a-alert :type="constStore.GetStatus(props.problem.status[i]).type"
+                        :title="constStore.GetStatus(props.problem.status[i]).status"
+                        v-show="constStore.GetStatus(props.problem.status[i]).status.length">
+                        <div v-html="props.problem.stdouts[i].replaceAll('\n', '<br>').replaceAll(' ', '&ensp;')"></div>
                     </a-alert>
                 </div>
             </a-typography-paragraph>

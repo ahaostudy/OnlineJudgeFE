@@ -63,8 +63,8 @@ const constStore = useConstStore()
 const activeKey = ref('1')
 const language = ref(Number(localStorage.getItem(`language`)) || 1)
 const sample = ref(0)
-const status = ref(constStore.StatusHide)
-const stdout = ref('')
+// const status = ref(constStore.StatusHide)
+// const stdout = ref('')
 const code = ref(localStorage.getItem(`code-${props.id}-${language.value}`) || '')
 const popup = ref(false)
 const showGPT = ref(false)
@@ -83,25 +83,30 @@ function chagneLanguage(value) {
 // 调试代码
 function debug() {
     activeKey.value = '2'
-    status.value = constStore.StatusRunning
-    stdout.value = ''
 
-    const input = props.problem.samples[sample.value].input
+    for (let i = 0; i < props.problem.samples.length; i++) {
+        props.problem.status[i] = constStore.StatusRunning
+        props.problem.stdouts[i] = ''
 
-    postDebug(code.value, input, language.value).then(res => {
-        if (res.status_code !== constStore.CodeSuccess.code) {
-            Message.error(res.status_msg)
-            status.value = constStore.StatusServerFailed
-            return
-        }
-        props.problem.samples[sample.value].output = res.result.output
-        status.value = res.result.status
-        if (status.value !== constStore.StatusAccepted && status.value !== constStore.StatusFinished) {
-            stdout.value = res.result.error
-        } else {
-            stdout.value = `执行时间：${res.result.time} ms  执行内存：${res.result.memory / 1024 / 1024} MB`
-        }
-    })
+        const input = props.problem.samples[i].input
+
+        postDebug(code.value, input, language.value).then(res => {
+            if (res.status_code !== constStore.CodeSuccess.code) {
+                Message.error(res.status_msg)
+                props.problem.status[i] = constStore.StatusServerFailed
+                return
+            }
+            props.problem.samples[i].output = res.result.output
+            props.problem.status[i] = res.result.status
+            const status = res.result.status
+            if (status !== constStore.StatusAccepted && status !== constStore.StatusFinished) {
+                props.problem.stdouts[i] = res.result.error
+            } else {
+                props.problem.stdouts[i] = `执行时间：${res.result.time} ms  执行内存：${res.result.memory / 1024 / 1024} MB`
+            }
+        })
+
+    }
 }
 
 // 提交代码
