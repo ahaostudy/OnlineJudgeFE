@@ -1,13 +1,8 @@
 name: Docker Build and Publish
 on:
-  push:
-    branches:
-      - master
-      - docker-test
   pull_request:
     branches:
       - master
-      - docker-test
 
 jobs:
   build-and-publish:

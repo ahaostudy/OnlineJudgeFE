@@ -10,7 +10,7 @@
             `#### 输出描述\n${problem.output_desc}\n` +
             `#### 数据范围\n${problem.data_range}\n` +
             `${samplesText}\n` +
-            `${problem.tips ? '#### 提示\n' + problem.tips : ''}\n`" ></v-md-preview>
+            `${problem.tips ? '#### 提示\n' + problem.tips : ''}\n`"></v-md-preview>
     </div>
 </template>
 
@@ -19,7 +19,6 @@
 import { getProblem } from '../../../services/problem'
 import { useConstStore } from '../../../store/const';
 import { ref, reactive, onMounted, defineEmits } from 'vue'
-import { Message } from '@arco-design/web-vue';
 
 const props = defineProps({
     id: { required: true },
@@ -39,12 +38,14 @@ const problem = reactive({
     tips: '',
     difficulty: '',
     samples: [],
+    status: [],
+    stdouts: [],
 })
 
 onMounted(() => {
     getProblem(props.id).then(res => {
         if (res.status_code !== constStore.CodeSuccess.code) {
-            Message.error(res.status_msg);
+            emit('get-problem', res.status_msg, false)
             return
         }
 
@@ -61,8 +62,10 @@ onMounted(() => {
                 `\`\`\`\n${sample.output}\n\`\`\`\n`
         }
         res.problem['samples'] = res.samples
+        res.problem['status'] = new Array(res.samples ? res.samples.length : 0).fill(constStore.StatusHide)
+        res.problem['stdouts'] = new Array(res.samples ? res.samples.length : 0).fill('')
 
-        emit('get-problem', res.problem)
+        emit('get-problem', res.problem, true)
     })
 })
 </script>

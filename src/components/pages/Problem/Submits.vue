@@ -7,7 +7,8 @@
                         :widths="['20%', '60%', '30%', '90%', '90%', '90%']" />
                 </a-space>
             </a-skeleton>
-            <v-md-preview :text="submitInfo" v-show="!loading" />
+            <a-empty :style="{ marginTop: '120px' }" v-show="empty"/>
+            <v-md-preview :text="submitInfo" v-show="!loading && !empty" />
         </template>
         <template #second>
             <div class="table-top">
@@ -39,7 +40,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { getSubmit, getSubmits } from '../../../services/submit'
 import { useConstStore } from '../../../store/const';
-import { Message } from '@arco-design/web-vue';
+import { Empty, Message } from '@arco-design/web-vue';
 
 const props = defineProps({
     id: { require: true }
@@ -94,15 +95,23 @@ const columns = reactive([
 const submits = reactive([])
 const submitInfo = ref('')
 const loading = ref(true)
+const empty = ref(true)
 
 function flushTable() {
     submits.splice(0)
 
     getSubmits(props.id).then(res => {
         if (res.status_code !== constStore.CodeSuccess.code) {
+            loading.value = false
             Message.error(res.status_msg)
             return
         }
+        if (!res.submit_list || !res.submit_list.length) {
+            loading.value = false
+            empty.value = true
+            return
+        }
+        empty.value = false
 
         const errors = [constStore.StatusCompileError, constStore.StatusRuntimeError, constStore.StatusWrongAnswer]
         const warnings = [constStore.StatusTimeLimitExceeded, constStore.StatusMemoryLimitExceeded, constStore.StatusOutputLimitExceeded]
@@ -137,7 +146,6 @@ function selectSubmit(record) {
 
     getSubmit(record.id).then(res => {
         if (res.status_code !== constStore.CodeSuccess.code) {
-            Message.error(res.status_msg)
             return
         }
         const submit = res.submit
