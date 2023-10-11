@@ -63,8 +63,6 @@ const constStore = useConstStore()
 const activeKey = ref('1')
 const language = ref(Number(localStorage.getItem(`language`)) || 1)
 const sample = ref(0)
-// const status = ref(constStore.StatusHide)
-// const stdout = ref('')
 const code = ref(localStorage.getItem(`code-${props.id}-${language.value}`) || '')
 const popup = ref(false)
 const showGPT = ref(false)
@@ -112,8 +110,8 @@ function debug() {
 // 提交代码
 function submit() {
     activeKey.value = '2'
-    status.value = constStore.StatusRunning
-    stdout.value = ''
+    props.problem.status[sample.value] = constStore.StatusRunning
+    props.problem.stdouts[sample.value] = ''
 
     postSubmit(props.id, code.value, language.value).then(response => {
         if (response.status_code !== constStore.CodeSuccess.code) {
@@ -138,14 +136,15 @@ function submit() {
                     interval *= 1.5;
                     setTimeout(exec, interval);
                 } else {
-                    status.value = res.result.status;
-                    if (status.value !== constStore.StatusAccepted && status.value !== constStore.StatusFinished) {
-                        stdout.value = res.result.error;
+                    props.problem.status[sample.value] = res.result.status;
+                    const status = res.result.status;
+                    if (status !== constStore.StatusAccepted && status !== constStore.StatusFinished) {
+                        props.problem.stdouts[sample.value] = res.result.error;
                     } else {
-                        stdout.value = `最大执行时间：${res.result.time} ms  最大执行内存：${res.result.memory / 1024 / 1024} MB`;
+                        props.problem.stdouts[sample.value] = `最大执行时间：${res.result.time} ms  最大执行内存：${res.result.memory / 1024 / 1024} MB`;
                     }
-                    Notification[constStore.GetStatus(status.value).type]({
-                        title: constStore.GetStatus(status.value).status,
+                    Notification[constStore.GetStatus(status).type]({
+                        title: constStore.GetStatus(status).status,
                         closable: true,
                     })
                 }
