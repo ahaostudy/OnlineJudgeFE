@@ -6,7 +6,7 @@
                     <icon-code /> 代码
                 </template>
 
-                <Buttons @debug="debug" @submit="submit" v-model:language="language" @update:language="chagneLanguage">
+                <Buttons @debug="debug" @submit="submit" :id="props.id" v-model:language="language" @update:language="chagneLanguage">
                 </Buttons>
                 <Editor :language="constStore.LanguageSuffixs[language - 1]" @change="changeCode" v-model="code">
                 </Editor>
@@ -15,7 +15,7 @@
                 <template #title>
                     <icon-check-square /> 测试样例
                 </template>
-                <Buttons @debug="debug" @submit="submit" v-model:language="language" @update:language="chagneLanguage">
+                <Buttons @debug="debug" @submit="submit" :id="props.id" v-model:language="language" @update:language="chagneLanguage">
                 </Buttons>
                 <Console v-model:problem="props.problem" v-model:sample="sample" :status="status" :stdout="stdout">
                 </Console>
