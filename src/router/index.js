@@ -3,6 +3,7 @@ const Index = () => import('../views/Index.vue')
 const Login = () => import('../views/Login.vue')
 const Problems = () => import('../views/Problems.vue')
 const Problem = () => import('../views/Problem.vue')
+const ProblemPreview = () => import('../views/ProblemPreview.vue')
 
 const routes = [
     {
@@ -20,6 +21,10 @@ const routes = [
     {
         path: '/problem/:id',
         component: Problem
+    },
+    {
+        path: '/problem/preview/:id',
+        component: ProblemPreview
     }
 ]
 
