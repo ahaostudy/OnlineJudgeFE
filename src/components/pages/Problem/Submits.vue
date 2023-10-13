@@ -1,5 +1,5 @@
 <template>
-    <a-split :style="{ height: '100%' }" :default-size="0.65">
+    <a-split :style="{ height: '100%' }" :default-size="0.7" id="submits-container">
         <template #first>
             <a-skeleton :style="{ padding: '40px' }" :animation="true" v-show="loading">
                 <a-space direction="vertical" :style="{ width: '100%' }" size="large">
@@ -7,8 +7,38 @@
                         :widths="['20%', '60%', '30%', '90%', '90%', '90%']" />
                 </a-space>
             </a-skeleton>
-            <a-empty :style="{ marginTop: '120px' }" v-show="empty"/>
-            <v-md-preview :text="submitInfo" v-show="!loading && !empty" />
+            <a-empty :style="{ marginTop: '120px' }" v-show="empty" />
+            <div v-show="!loading && !empty && !editing">
+                <div class="preview-btns">
+                    {{ submit.createdTime }}
+                    <a-button type="text" @click="editing = true">
+                        <template #icon>
+                            <icon-edit />
+                        </template>
+                        编辑
+                    </a-button>
+                </div>
+                <v-md-preview :text="submitInfo" />
+            </div>
+            <div class="editor-box" v-show="!loading && !empty && editing">
+                <div class="editor-top">
+                    <a-input :style="{ width: '320px' }" placeholder="请输入笔记标题" allow-clear />
+                    <div class="editor-btns">
+                        <a-button @click="editing = false">
+                            取消编辑
+                        </a-button>
+                        <a-button type="primary">
+                            <template #icon>
+                                <icon-save />
+                            </template>
+                            保存为笔记
+                        </a-button>
+                    </div>
+                </div>
+                <div class="editor">
+                    <v-md-editor class="editor" v-model="note" v-show="!loading && !empty" />
+                </div>
+            </div>
         </template>
         <template #second>
             <div class="table-top">
@@ -40,7 +70,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { getSubmit, getSubmits } from '../../../services/submit'
 import { useConstStore } from '../../../store/const';
-import { Empty, Message } from '@arco-design/web-vue';
+import { Message } from '@arco-design/web-vue';
 
 const props = defineProps({
     id: { require: true }
@@ -93,9 +123,20 @@ const columns = reactive([
 ])
 
 const submits = reactive([])
+const submit = reactive({
+    statusText: '',
+    time: '',
+    memory: '',
+    language: '',
+    langSuf: '',
+    code: '',
+    createdTime: ''
+})
 const submitInfo = ref('')
+const note = ref('')
 const loading = ref(true)
 const empty = ref(true)
+const editing = ref(false)
 
 function flushTable() {
     submits.splice(0)
@@ -143,20 +184,34 @@ function flushTable() {
 
 function selectSubmit(record) {
     loading.value = true
+    editing.value = false
 
     getSubmit(record.id).then(res => {
         if (res.status_code !== constStore.CodeSuccess.code) {
             return
         }
-        const submit = res.submit
-        submitInfo.value = `## ${record.status.status}\n` +
-            `执行用时：${submit.time} ms &nbsp;&nbsp;&nbsp; 执行内存：${(submit.memory / 1024 / 1024).toFixed(1)} MB\n` +
-            `### ${record.language}\n` +
+        for (const key in res.submit) {
+            submit[key] = res.submit[key]
+        }
+        submit.statusText = constStore.GetStatus(submit.status).status
+        submit.language = record.language
+        submit.langSuf = constStore.LanguageSuffixs[submit.lang_id - 1]
+        submit.memory = (submit.memory / 1024 / 1024).toFixed(1)
+        submit.createdTime = new Date(submit.created_at).toLocaleString()
+
+        submitInfo.value = `### ${constStore.GetStatus(submit.status).status}\n\n` +
+            `执行用时：${submit.time} ms &nbsp;&nbsp;&nbsp; 执行内存：${(submit.memory / 1024 / 1024).toFixed(1)} MB\n\n` +
+            `### ${record.language}\n\n` +
             "``` " + constStore.LanguageSuffixs[submit.lang_id - 1] + "\n" +
             `${submit.code}\n` +
-            "```"
+            "```\n"
+        note.value = `[//]: # (笔记填到此处嗷~)\n\n\n\n[//]: # (笔记_END)\n\n\n***\n\n\n${submitInfo.value}`
         loading.value = false
     })
+}
+
+function edit() {
+    editing.value = true
 }
 
 onMounted(() => {
@@ -165,6 +220,41 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.preview-btns {
+    padding: 10px 0;
+    margin: 0 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-neutral-3);
+}
+
+.editor-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+
+    .editor-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        border-bottom: 1px solid var(--color-neutral-3);
+
+        .editor-btns {
+            display: flex;
+            justify-content: end;
+            gap: 10px;
+        }
+    }
+
+    .editor {
+        flex: 1;
+        padding: 16px;
+    }
+}
+
 .table-top {
     height: 40px;
     display: flex;
@@ -181,6 +271,10 @@ onMounted(() => {
 </style>
 
 <style>
+#submits-container .v-md-editor {
+    box-shadow: 0 2px 12px 0 rgba(0,0,0,.07);
+}
+
 #submit-record .arco-table-th {
     background-color: var(--color-bg-1);
 }
@@ -192,5 +286,9 @@ onMounted(() => {
 
 #submit-record .arco-table-cell {
     padding: 6px;
+}
+
+#submit-record .v-md-editor__toolbar {
+    display: none;
 }
 </style>

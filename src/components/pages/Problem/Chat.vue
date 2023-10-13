@@ -192,10 +192,10 @@ async function sendMsg(idx) {
             if (!result.done) {
                 reader.read().then(processStreamResult);
             } else {
-                saveMsgs()
                 console.log(messages[idx].content);
                 receiving.value = false;
             }
+            saveMsgs()
         }
 
         reader.read().then(processStreamResult);

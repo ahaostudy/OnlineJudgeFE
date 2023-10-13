@@ -76,7 +76,7 @@ onMounted(() => {
     margin: auto;
 
     .title {
-        padding: 40px 32px;
+        padding: 32px;
 
         display: flex;
         align-items: center;

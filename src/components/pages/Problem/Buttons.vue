@@ -30,9 +30,9 @@
                     <icon-check size="20px" />
                 </a-button>
             </a-tooltip>
-            <a-tooltip content="分享题目" position="bottom">
+            <a-tooltip content="题目展示" position="bottom">
                 <a-button type="text" @click="$router.push(`/problem/preview/${props.id}`)">
-                    <icon-share-alt size="20px" />
+                    <icon-file size="20px" />
                 </a-button>
             </a-tooltip>
             <a-tooltip content="设置（开发中）" position="bottom">
