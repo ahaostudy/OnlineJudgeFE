@@ -30,6 +30,11 @@
                     <icon-check size="20px" />
                 </a-button>
             </a-tooltip>
+            <a-tooltip content="分享题目" position="bottom">
+                <a-button type="text" @click="$router.push(`/problem/preview/${props.id}`)">
+                    <icon-share-alt size="20px" />
+                </a-button>
+            </a-tooltip>
             <a-tooltip content="设置（开发中）" position="bottom">
                 <a-button type="text">
                     <icon-settings size="20px" />
@@ -45,7 +50,7 @@ import { defineEmits } from 'vue'
 
 const constStore = useConstStore()
 const emit = defineEmits(['update:language', 'debug', 'submit'])
-const props = defineProps(['language'])
+const props = defineProps(['language', 'id'])
 
 function change(value) {
     emit('update:language', value);

@@ -4,6 +4,7 @@ const Login = () => import('../views/Login.vue')
 const Problems = () => import('../views/Problems.vue')
 const Problem = () => import('../views/Problem.vue')
 const ProblemPreview = () => import('../views/ProblemPreview.vue')
+const AdminTestcase = () => import('../views/AdminTestcase.vue')
 
 const routes = [
     {
@@ -25,6 +26,10 @@ const routes = [
     {
         path: '/problem/preview/:id',
         component: ProblemPreview
+    },
+    {
+        path: '/admin/testcase',
+        component: AdminTestcase
     }
 ]
 

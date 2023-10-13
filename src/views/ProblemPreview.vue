@@ -72,7 +72,7 @@ onMounted(() => {
 <style scoped lang="less">
 #problem-preview {
     padding: 20px 8px;
-    max-width: 1000px;
+    max-width: 1500px;
     margin: auto;
 
     .title {

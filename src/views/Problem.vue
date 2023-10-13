@@ -6,7 +6,7 @@
             {{ id }}. {{ problem.title }}
         </div>
         <div id="main-container">
-            <a-split direction="horizontal" :style="{ height: '100%' }" :default-size="0.2" :min="'400px'">
+            <a-split direction="horizontal" :style="{ height: '100%' }" :default-size="0.22">
                 <template #first>
                     <div id="left-container">
                         <Info :id="id" @get-problem="getProblem"></Info>
@@ -64,7 +64,6 @@ function getProblem(p, ok) {
 
     display: flex;
     align-items: center;
-    gap: 20px;
 
     font-size: 20px;
     background-color: var(--color-bg-1);
@@ -73,6 +72,7 @@ function getProblem(p, ok) {
 
     .btn-index {
         cursor: pointer;
+        margin-right: 20px;
     }
 }
 
