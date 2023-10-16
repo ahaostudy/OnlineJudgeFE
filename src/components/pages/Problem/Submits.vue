@@ -8,9 +8,12 @@
                 </a-space>
             </a-skeleton>
             <a-empty :style="{ marginTop: '120px' }" v-show="empty" />
-            <div v-show="!loading && !empty && !editing">
+            <div class="preview-box" v-show="!loading && !empty && !editing">
                 <div class="preview-btns">
-                    {{ submit.createdTime }}
+                    <div style="color: var(--color-neutral-8);">
+                        <icon-file v-show="submit.note_id" />
+                        {{ submit.note_id ? `${submit.note.title}` : `提交于：${submit.createdTime}` }}
+                    </div>
                     <a-button type="text" @click="editing = true">
                         <template #icon>
                             <icon-edit />
@@ -18,16 +21,18 @@
                         编辑
                     </a-button>
                 </div>
-                <v-md-preview :text="submitInfo" />
+                <div class="preview">
+                    <v-md-preview :text="submit.note_id ? submit.note.content : submitInfo" />
+                </div>
             </div>
             <div class="editor-box" v-show="!loading && !empty && editing">
                 <div class="editor-top">
-                    <a-input :style="{ width: '320px' }" placeholder="请输入笔记标题" allow-clear />
+                    <a-input :style="{ width: '320px' }" v-model="submit.note.title" placeholder="请输入笔记标题" allow-clear />
                     <div class="editor-btns">
                         <a-button @click="editing = false">
                             取消编辑
                         </a-button>
-                        <a-button type="primary">
+                        <a-button type="primary" @click="saveNote">
                             <template #icon>
                                 <icon-save />
                             </template>
@@ -36,7 +41,7 @@
                     </div>
                 </div>
                 <div class="editor">
-                    <v-md-editor class="editor" v-model="note" v-show="!loading && !empty" />
+                    <v-md-editor class="editor" v-model="submit.note.content" v-show="!loading && !empty" />
                 </div>
             </div>
         </template>
@@ -69,6 +74,7 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { getSubmit, getSubmits } from '../../../services/submit'
+import { postCreateNote, putUpdateNote } from '../../../services/note'
 import { useConstStore } from '../../../store/const';
 import { Message } from '@arco-design/web-vue';
 
@@ -124,16 +130,21 @@ const columns = reactive([
 
 const submits = reactive([])
 const submit = reactive({
+    id: '',
     statusText: '',
     time: '',
     memory: '',
     language: '',
     langSuf: '',
     code: '',
-    createdTime: ''
+    createdTime: '',
+    note_id: 0,
+    note: {
+        'title': '',
+        'content': ''
+    }
 })
 const submitInfo = ref('')
-const note = ref('')
 const loading = ref(true)
 const empty = ref(true)
 const editing = ref(false)
@@ -160,7 +171,6 @@ function flushTable() {
             s['key'] = s['id']
             s['submit_time'] = new Date(s['created_at']).toLocaleString()
             s['language'] = constStore.Languages[s['lang_id'] - 1]
-
             s['status'] = constStore.GetStatus(s['status'])
 
             if (errors.indexOf(s['status'].code) !== -1) s['status'].color = 'red'
@@ -191,6 +201,11 @@ function selectSubmit(record) {
             return
         }
         for (const key in res.submit) {
+            if (key == 'note' && !res.submit[key]) {
+                submit.note.title = ''
+                submit.note.content = ''
+                continue
+            }
             submit[key] = res.submit[key]
         }
         submit.statusText = constStore.GetStatus(submit.status).status
@@ -199,19 +214,32 @@ function selectSubmit(record) {
         submit.memory = (submit.memory / 1024 / 1024).toFixed(1)
         submit.createdTime = new Date(submit.created_at).toLocaleString()
 
-        submitInfo.value = `### ${constStore.GetStatus(submit.status).status}\n\n` +
+        submitInfo.value = `## ${constStore.GetStatus(submit.status).status}\n\n` +
             `执行用时：${submit.time} ms &nbsp;&nbsp;&nbsp; 执行内存：${(submit.memory / 1024 / 1024).toFixed(1)} MB\n\n` +
             `### ${record.language}\n\n` +
             "``` " + constStore.LanguageSuffixs[submit.lang_id - 1] + "\n" +
             `${submit.code}\n` +
             "```\n"
-        note.value = `[//]: # (笔记填到此处嗷~)\n\n\n\n[//]: # (笔记_END)\n\n\n***\n\n\n${submitInfo.value}`
+        if (!submit.note_id) {
+            submit.note.content = `[//]: # (笔记填到此处嗷~)\n\n\n\n[//]: # (笔记_END)\n\n\n***\n\n<br>\n\n${submitInfo.value}`
+        }
         loading.value = false
     })
 }
 
-function edit() {
-    editing.value = true
+function saveNote() {
+    const callback = res => {
+        if (res.status_code !== constStore.CodeSuccess.code) {
+            Message.error(res.status_msg)
+            return
+        }
+
+        editing.value = false
+        Message.success('保存成功')
+    }
+
+    if (!submit.note_id) postCreateNote(submit.note.title, submit.note.content, props.id, submit.id).then(callback)
+    else putUpdateNote(submit.note_id, submit.note.title, submit.note.content).then(callback)
 }
 
 onMounted(() => {
@@ -220,13 +248,23 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.preview-btns {
-    padding: 10px 0;
-    margin: 0 32px;
+.preview-box {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--color-neutral-3);
+    flex-direction: column;
+
+    .preview-btns {
+        padding: 6px 9px 6px 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--color-neutral-3);
+    }
+
+    .preview {
+        margin: 16px;
+        flex: 1;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .07);
+    }
 }
 
 .editor-box {
@@ -272,7 +310,15 @@ onMounted(() => {
 
 <style>
 #submits-container .v-md-editor {
-    box-shadow: 0 2px 12px 0 rgba(0,0,0,.07);
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .07);
+}
+
+#submits-container .github-markdown-body {
+    padding-top: 26px;
+}
+
+#submits-container .github-markdown-body hr {
+    height: 1px;
 }
 
 #submit-record .arco-table-th {

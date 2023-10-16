@@ -15,6 +15,7 @@
                     <a-menu-item key="2" @click="router.push('/problems')">题库</a-menu-item>
                     <a-menu-item key="3">竞赛</a-menu-item>
                     <a-menu-item key="4">校队</a-menu-item>
+                    <a-menu-item key="5" @click="router.push('/notes')">笔记</a-menu-item>
                 </a-menu>
             </div>
             <ul class="right-side">
@@ -23,7 +24,7 @@
                 </li>
                 <li v-show="logined">
                     <a-dropdown position="br">
-                        <a-avatar :image-url="user.avatar" :size="30"></a-avatar>
+                        <a-avatar :image-url="appStore.user.avatar" :size="30"></a-avatar>
                         <template #content>
                             <a-doption>
                                 <template #icon> <icon-file /> </template>
@@ -46,19 +47,18 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { getUser } from '../../services/user'
 import { useConstStore } from '../../store/const';
+import { useAppStore } from "../../store/app";
 
 const router = useRouter()
 const constStore = useConstStore()
+const appStore = useAppStore()
 const staticPath = import.meta.env.VITE_BASE_HOST + import.meta.env.VITE_STATIC_HOST
 
 const logined = ref(false)
-const user = reactive({
-    avatar: '',
-})
 
 const props = defineProps({
     default: {
@@ -70,13 +70,12 @@ const props = defineProps({
 onMounted(() => {
     if (localStorage.getItem('token')) {
         logined.value = true
-        getUser(0).then(res => {
+        getUser(-1).then(res => {
             if (res.status_code !== constStore.CodeSuccess.code) return
             for (let key in res.user) {
-                user[key] = res.user[key]
+                appStore.user[key] = res.user[key]
             }
-            user.avatar = staticPath + res.user.avatar
-            console.log(user.avatar);
+            appStore.user.avatar = staticPath + res.user.avatar
         })
     }
 })

@@ -104,7 +104,6 @@ onMounted(() => {
     gap: 20px;
 
     .table {
-
         .title {
             cursor: pointer;
         }
