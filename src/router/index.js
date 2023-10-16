@@ -5,6 +5,8 @@ const Problems = () => import('../views/Problems.vue')
 const Problem = () => import('../views/Problem.vue')
 const ProblemPreview = () => import('../views/ProblemPreview.vue')
 const AdminTestcase = () => import('../views/AdminTestcase.vue')
+const Notes = () => import('../views/Notes.vue')
+const Note = () => import('../views/Note.vue')
 
 const routes = [
     {
@@ -30,6 +32,14 @@ const routes = [
     {
         path: '/admin/testcase',
         component: AdminTestcase
+    },
+    {
+        path: '/notes',
+        component: Notes
+    },
+    {
+        path: '/note/:id',
+        component: Note
     }
 ]
 

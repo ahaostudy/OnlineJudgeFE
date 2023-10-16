@@ -1,7 +1,7 @@
 <template>
     <div id="problem-info">
         <div class="limit">
-            时间限制：{{ problem.max_time }} s
+            时间限制：{{ problem.max_time }} ms
             &nbsp;
             空间限制：{{ problem.max_memory / 1024 / 1024 }} MB
         </div>
@@ -18,7 +18,7 @@
 
 import { getProblem } from '../../../services/problem'
 import { useConstStore } from '../../../store/const';
-import { ref, reactive, onMounted, defineEmits } from 'vue'
+import { ref, reactive, defineEmits } from 'vue'
 
 const props = defineProps({
     id: { required: true },
@@ -42,31 +42,29 @@ const problem = reactive({
     stdouts: [],
 })
 
-onMounted(() => {
-    getProblem(props.id).then(res => {
-        if (res.status_code !== constStore.CodeSuccess.code) {
-            emit('get-problem', res.status_msg, false)
-            return
-        }
+getProblem(props.id).then(res => {
+    if (res.status_code !== constStore.CodeSuccess.code) {
+        emit('get-problem', res.status_msg, false)
+        return
+    }
 
-        for (let key in res.problem) {
-            problem[key] = res.problem[key];
-        }
+    for (let key in res.problem) {
+        problem[key] = res.problem[key];
+    }
 
-        for (const i in res.samples) {
-            const sample = res.samples[i]
-            samplesText.value += `#### 示例 ${Number(i) + 1}\n` +
-                `**输入**\n` +
-                `\`\`\`\n${sample.input}\n\`\`\`\n` +
-                `**输出**\n` +
-                `\`\`\`\n${sample.output}\n\`\`\`\n`
-        }
-        res.problem['samples'] = res.samples
-        res.problem['status'] = new Array(res.samples ? res.samples.length : 0).fill(constStore.StatusHide)
-        res.problem['stdouts'] = new Array(res.samples ? res.samples.length : 0).fill('')
+    for (const i in res.samples) {
+        const sample = res.samples[i]
+        samplesText.value += `#### 示例 ${Number(i) + 1}\n` +
+            `**输入**\n` +
+            `\`\`\`\n${sample.input}\n\`\`\`\n` +
+            `**输出**\n` +
+            `\`\`\`\n${sample.output}\n\`\`\`\n`
+    }
+    res.problem['samples'] = res.samples
+    res.problem['status'] = new Array(res.samples ? res.samples.length : 0).fill(constStore.StatusHide)
+    res.problem['stdouts'] = new Array(res.samples ? res.samples.length : 0).fill('')
 
-        emit('get-problem', res.problem, true)
-    })
+    emit('get-problem', res.problem, true)
 })
 </script>
 
