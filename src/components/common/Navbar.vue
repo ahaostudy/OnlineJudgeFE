@@ -24,9 +24,14 @@
                 </li>
                 <li v-show="logined">
                     <a-dropdown position="br">
-                        <a-avatar :image-url="appStore.user.avatar" :size="30"></a-avatar>
+                        <a-avatar :image-url="appStore.user.avatar" :size="30"
+                            v-if="appStore.user.avatar && appStore.user.avatar !== ''">
+                        </a-avatar>
+                        <a-avatar :size="30" :style="{ backgroundColor: '#165dff' }" v-else>
+                            {{ appStore.user.nickname.substring(0, 1).toUpperCase() }}
+                        </a-avatar>
                         <template #content>
-                            <a-doption>
+                            <a-doption @click="router.push(`/profile/${appStore.user.username}`)">
                                 <template #icon> <icon-file /> </template>
                                 个人资料
                             </a-doption>
@@ -75,7 +80,9 @@ onMounted(() => {
             for (let key in res.user) {
                 appStore.user[key] = res.user[key]
             }
-            appStore.user.avatar = staticPath + res.user.avatar
+            if (res.user.avatar && res.user.avatar !== '') {
+                appStore.user.avatar = staticPath + res.user.avatar
+            }
         })
     }
 })

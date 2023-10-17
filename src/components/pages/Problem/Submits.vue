@@ -7,6 +7,7 @@
                         :widths="['20%', '60%', '30%', '90%', '90%', '90%']" />
                 </a-space>
             </a-skeleton>
+            <a-anchor></a-anchor>
             <a-empty :style="{ marginTop: '120px' }" v-show="empty" />
             <div class="preview-box" v-show="!loading && !empty && !editing">
                 <div class="preview-btns">
@@ -36,7 +37,7 @@
                             <template #icon>
                                 <icon-save />
                             </template>
-                            保存为笔记
+                            保存笔记
                         </a-button>
                     </div>
                 </div>
@@ -165,8 +166,9 @@ function flushTable() {
         }
         empty.value = false
 
-        const errors = [constStore.StatusCompileError, constStore.StatusRuntimeError, constStore.StatusWrongAnswer]
+        const errors = [constStore.StatusCompileError, constStore.StatusRuntimeError, constStore.StatusWrongAnswer, constStore.StatusServerFailed]
         const warnings = [constStore.StatusTimeLimitExceeded, constStore.StatusMemoryLimitExceeded, constStore.StatusOutputLimitExceeded]
+        const infos = [constStore.StatusFinished]
         for (let s of res.submit_list) {
             s['key'] = s['id']
             s['submit_time'] = new Date(s['created_at']).toLocaleString()
@@ -175,6 +177,7 @@ function flushTable() {
 
             if (errors.indexOf(s['status'].code) !== -1) s['status'].color = 'red'
             else if (warnings.indexOf(s['status'].code) !== -1) s['status'].color = 'orange'
+            else if (infos.indexOf(s['status'].code) !== -1) s['status'].color = 'blue'
             else s['status'].color = 'green'
 
             if (s['status'].code === constStore.StatusAccepted) {
@@ -215,7 +218,7 @@ function selectSubmit(record) {
         submit.createdTime = new Date(submit.created_at).toLocaleString()
 
         submitInfo.value = `## ${constStore.GetStatus(submit.status).status}\n\n` +
-            `执行用时：${submit.time} ms &nbsp;&nbsp;&nbsp; 执行内存：${(submit.memory / 1024 / 1024).toFixed(1)} MB\n\n` +
+            `执行用时：${submit.time} ms &nbsp;&nbsp;&nbsp; 执行内存：${submit.memory} MB\n\n` +
             `### ${record.language}\n\n` +
             "``` " + constStore.LanguageSuffixs[submit.lang_id - 1] + "\n" +
             `${submit.code}\n` +
@@ -228,6 +231,15 @@ function selectSubmit(record) {
 }
 
 function saveNote() {
+    if (!submit.note.title) {
+        Message.error('请填写笔记标题')
+        return
+    }
+    if (!submit.note.content) {
+        Message.error('请填写笔记内容')
+        return
+    }
+
     const callback = res => {
         if (res.status_code !== constStore.CodeSuccess.code) {
             Message.error(res.status_msg)
@@ -247,7 +259,7 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .preview-box {
     display: flex;
     flex-direction: column;

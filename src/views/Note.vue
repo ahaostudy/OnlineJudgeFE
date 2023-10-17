@@ -6,7 +6,11 @@
                 <div class="note-info-box">
                     <div class="note-title">{{ note.title }}</div>
                     <div class="note-publish-info">
-                        <a-avatar :imageUrl="author.avatar" :size="20"></a-avatar>
+                        <a-avatar :image-url="author.avatar" :size="20" v-if="author.avatar && author.avatar !== ''">
+                        </a-avatar>
+                        <a-avatar :size="20" :style="{ backgroundColor: '#165dff' }" v-else>
+                            {{ author.nickname.substring(0, 1).toUpperCase() }}
+                        </a-avatar>
                         <div>{{ author.nickname }}</div>
                         <div>发布于：{{ new Date(note.created_at).toLocaleString() }}</div>
                     </div>
@@ -31,7 +35,10 @@ const constStore = useConstStore()
 
 const id = ref(route.params.id)
 const note = reactive({})
-const author = reactive({})
+const author = reactive({
+    nickname: '',
+    avatar: '',
+})
 
 onMounted(() => {
     getNote(id.value).then(res => {
@@ -46,7 +53,9 @@ onMounted(() => {
         for (const key in res.user) {
             author[key] = res.user[key]
         }
-        author.avatar = import.meta.env.VITE_BASE_HOST + import.meta.env.VITE_STATIC_HOST + author.avatar
+        if (author.avatar && author.avatar !== '')
+            author.avatar = import.meta.env.VITE_BASE_HOST + import.meta.env.VITE_STATIC_HOST + author.avatar
+        else author.avatar = ''
     })
 
 })

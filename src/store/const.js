@@ -39,7 +39,7 @@ export const useConstStore = defineStore('const', () => {
 
     const Status = new Array();
     Status[StatusAccepted] = { status: 'Accepted', type: 'success' }
-    Status[StatusFinished] = { status: 'Finished', type: 'success' }
+    Status[StatusFinished] = { status: 'Finished', type: 'info' }
     Status[StatusRunning] = { status: 'Running', type: 'normal' }
     Status[StatusCompileError] = { status: 'Compile Error', type: 'error' }
     Status[StatusRuntimeError] = { status: 'Runtime Error', type: 'error' }
