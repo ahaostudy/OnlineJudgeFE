@@ -6,11 +6,7 @@
                 <div class="note-info-box">
                     <div class="note-title">{{ note.title }}</div>
                     <div class="note-publish-info">
-                        <a-avatar :image-url="author.avatar" :size="20" v-if="author.avatar && author.avatar !== ''">
-                        </a-avatar>
-                        <a-avatar :size="20" :style="{ backgroundColor: '#165dff' }" v-else>
-                            {{ author.nickname.substring(0, 1).toUpperCase() }}
-                        </a-avatar>
+                        <Avatar :avatar="author.avatar" :name="author.nickname" :size="20"></Avatar>
                         <div>{{ author.nickname }}</div>
                         <div>发布于：{{ new Date(note.created_at).toLocaleString() }}</div>
                     </div>
@@ -29,6 +25,7 @@ import { getNote } from '../services/note'
 import { useConstStore } from '../store/const';
 import { Message } from '@arco-design/web-vue';
 import Container from '../components/common/Container.vue';
+import Avatar from '../components/common/Avatar.vue';
 
 const route = useRoute()
 const constStore = useConstStore()

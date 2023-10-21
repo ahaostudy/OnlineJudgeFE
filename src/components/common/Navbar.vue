@@ -24,12 +24,7 @@
                 </li>
                 <li v-show="logined">
                     <a-dropdown position="br">
-                        <a-avatar :image-url="appStore.user.avatar" :size="30"
-                            v-if="appStore.user.avatar && appStore.user.avatar !== ''">
-                        </a-avatar>
-                        <a-avatar :size="30" :style="{ backgroundColor: '#165dff' }" v-else>
-                            {{ appStore.user.nickname.substring(0, 1).toUpperCase() }}
-                        </a-avatar>
+                        <Avatar :avatar="appStore.user.avatar" :name="appStore.user.nickname"></Avatar>
                         <template #content>
                             <a-doption @click="router.push(`/profile/${appStore.user.username}`)">
                                 <template #icon> <icon-file /> </template>
@@ -57,6 +52,7 @@ import { useRouter } from 'vue-router'
 import { getUser } from '../../services/user'
 import { useConstStore } from '../../store/const';
 import { useAppStore } from "../../store/app";
+import Avatar from '../common/Avatar.vue'
 
 const router = useRouter()
 const constStore = useConstStore()

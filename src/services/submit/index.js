@@ -41,3 +41,8 @@ export function getLatestSubmits(count) {
         count,
     })
 }
+export function getSubmitCalendar(userID) {
+    return get("/submit/calendar", {
+        user_id: Number(userID),
+    })
+}
