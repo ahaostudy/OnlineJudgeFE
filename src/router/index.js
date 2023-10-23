@@ -7,45 +7,50 @@ const ProblemPreview = () => import('../views/ProblemPreview.vue')
 const AdminTestcase = () => import('../views/AdminTestcase.vue')
 const Notes = () => import('../views/Notes.vue')
 const Note = () => import('../views/Note.vue')
+const Profile = () => import('../views/Profile.vue')
 
 const routes = [
-    {
-        path: '/',
-        component: Problems,
-    },
-    {
-        path: '/problems',
-        component: Problems
-    },
-    {
-        path: '/login',
-        component: Login
-    },
-    {
-        path: '/problem/:id',
-        component: Problem
-    },
-    {
-        path: '/problem/preview/:id',
-        component: ProblemPreview
-    },
-    {
-        path: '/admin/testcase',
-        component: AdminTestcase
-    },
-    {
-        path: '/notes',
-        component: Notes
-    },
-    {
-        path: '/note/:id',
-        component: Note
-    }
+  {
+    path: '/',
+    component: Problems
+  },
+  {
+    path: '/problems',
+    component: Problems
+  },
+  {
+    path: '/login',
+    component: Login
+  },
+  {
+    path: '/problem/:id',
+    component: Problem
+  },
+  {
+    path: '/problem/preview/:id',
+    component: ProblemPreview
+  },
+  {
+    path: '/admin/testcase',
+    component: AdminTestcase
+  },
+  {
+    path: '/notes',
+    component: Notes
+  },
+  {
+    path: '/note/:id',
+    component: Note
+  },
+  {
+    path: '/profile/:username',
+    component: Profile
+  }
 ]
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    routes
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes
 })
 
 export default router
