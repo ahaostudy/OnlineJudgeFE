@@ -63,7 +63,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getUser } from '../../services/user'
+import { getUser, avatarPath } from '../../services/user'
 import { useConstStore } from '../../store/const'
 import { useAppStore } from '../../store/app'
 import Avatar from '../common/Avatar.vue'
@@ -71,8 +71,6 @@ import Avatar from '../common/Avatar.vue'
 const router = useRouter()
 const constStore = useConstStore()
 const appStore = useAppStore()
-const staticPath =
-  import.meta.env.VITE_BASE_HOST + import.meta.env.VITE_STATIC_HOST
 
 const logined = ref(false)
 
@@ -92,7 +90,7 @@ onMounted(() => {
         appStore.user[key] = res.user[key]
       }
       if (res.user.avatar && res.user.avatar !== '') {
-        appStore.user.avatar = staticPath + res.user.avatar
+        appStore.user.avatar = avatarPath(appStore.user.avatar)
       }
     })
   }

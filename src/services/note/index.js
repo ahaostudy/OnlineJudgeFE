@@ -15,8 +15,8 @@ export function postCreateNote(title, content, problemID, submitID) {
   return post('/note/', {
     title: title,
     content: content,
-    problem_id: BigInt(problemID),
-    submit_id: BigInt(submitID),
+    problem_id: Number(problemID),
+    submit_id: Number(submitID),
     user_id: -1
   })
 }

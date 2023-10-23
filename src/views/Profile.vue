@@ -6,8 +6,8 @@
         <div class="user-info">
           <Info :user="user" />
         </div>
-        <div class="user-profile">
-          <Profile />
+        <div class="user-description">
+          <Description :user="user" />
         </div>
         <div class="user-stats">
           <!-- 热力图 -->
@@ -32,9 +32,9 @@ import { useConstStore } from '../store/const'
 import { Message } from '@arco-design/web-vue'
 import Container from '../components/common/Container.vue'
 import Info from '../components/pages/Profile/Info.vue'
-import Profile from '../components/pages/Profile/Profile.vue'
 import SubmitStats from '../components/pages/Profile/SubmitStats.vue'
 import NoteStats from '../components/pages/Profile/NoteStats.vue'
+import Description from '../components/pages/Profile/Description.vue'
 
 const route = useRoute()
 const constStore = useConstStore()
@@ -48,6 +48,7 @@ getUser(0, username.value).then((res) => {
     Message.error(res.status_msg)
     return
   }
+  console.log(res);
   for (let key in res.user) {
     user[key] = res.user[key]
   }

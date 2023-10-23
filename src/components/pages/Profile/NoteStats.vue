@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, watch } from 'vue'
+import { reactive, watch } from 'vue'
 import { getNotes } from '../../../services/note'
 import { useConstStore } from '../../../store/const'
 

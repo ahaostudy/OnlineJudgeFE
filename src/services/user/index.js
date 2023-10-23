@@ -1,4 +1,13 @@
-import { get, post } from '../api'
+import { get, post, put } from '../api'
+
+export function avatarPath(avatar) {
+  return (
+    import.meta.env.VITE_BASE_HOST +
+    import.meta.env.VITE_API_URI +
+    '/user/avatar/' +
+    avatar
+  )
+}
 
 export function postLoginByPassword(username, password) {
   return post('/user/login', {
@@ -6,6 +15,10 @@ export function postLoginByPassword(username, password) {
     email: username,
     password: password
   })
+}
+
+export function putUpdateUser(userID, user) {
+  return put('/user/' + userID, user)
 }
 
 export function postLoginByEmail(email, captcha) {
