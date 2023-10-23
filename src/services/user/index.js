@@ -47,3 +47,7 @@ export function getUser(id, username) {
     username
   })
 }
+
+export function putUpdateAvatar(data) {
+  return put('/user/avatar', data)
+}

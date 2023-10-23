@@ -11,7 +11,8 @@
         height: `${props.size / 4}px`,
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        color: 'rgb(var(--primary-6))'
       }"
     >
       <template #trigger-icon v-if="props.showEditButton">
@@ -36,7 +37,8 @@
         height: `${props.size / 4}px`,
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        color: 'rgb(var(--primary-6))'
       }"
       v-else
     >
