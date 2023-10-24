@@ -8,6 +8,7 @@ const AdminTestcase = () => import('../views/AdminTestcase.vue')
 const Notes = () => import('../views/Notes.vue')
 const Note = () => import('../views/Note.vue')
 const Profile = () => import('../views/Profile.vue')
+const NotFound = () => import('../views/NotFound.vue')
 
 const routes = [
   {
@@ -45,6 +46,10 @@ const routes = [
   {
     path: '/profile/:username',
     component: Profile
+  },
+  {
+    path: '/:pathMatch(.*)',
+    component: NotFound
   }
 ]
 

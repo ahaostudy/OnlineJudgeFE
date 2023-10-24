@@ -1,7 +1,11 @@
 <template>
   <div @mouseover="hover = true" @mouseleave="hover = false">
     <div class="btn-edit">
-      <a-button shape="circle" v-if="hover && !editing" @click="editing = true">
+      <a-button
+        shape="circle"
+        v-if="props.user.id === appStore.user.id && hover && !editing"
+        @click="editing = true"
+      >
         <icon-edit />
       </a-button>
       <a-button shape="circle" v-if="editing" @click="editing = false">
@@ -18,7 +22,10 @@
     </div>
     <div
       id="user-description"
-      :class="{ 'user-description-hover': hover && !editing }"
+      :class="{
+        'user-description-hover':
+          props.user.id === appStore.user.id && hover && !editing
+      }"
     >
       <v-md-editor v-model="props.user.signature" v-if="editing" />
       <v-md-preview :text="props.user.signature" v-else />
@@ -40,6 +47,7 @@ const props = defineProps({
   user: {
     require: true,
     default: {
+      id: 0,
       signature: ''
     }
   }
@@ -79,12 +87,12 @@ function saveSignature() {
 }
 
 .user-description-hover {
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  background-color: #fafafa;
 }
 </style>
 
 <style>
 #user-description .github-markdown-body {
-  padding: 20px 12px 0;
+  padding: 0;
 }
 </style>
