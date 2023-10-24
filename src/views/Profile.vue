@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div v-if="userNotExist">
+    <NotFound></NotFound>
+  </div>
+  <div v-else>
     <Navbar :default="'0'"></Navbar>
     <Container>
       <div id="profile-container">
@@ -35,20 +38,25 @@ import Info from '../components/pages/Profile/Info.vue'
 import SubmitStats from '../components/pages/Profile/SubmitStats.vue'
 import NoteStats from '../components/pages/Profile/NoteStats.vue'
 import Description from '../components/pages/Profile/Description.vue'
+import NotFound from './NotFound.vue'
 
 const route = useRoute()
 const constStore = useConstStore()
 const user = reactive({})
+const userNotExist = ref(false)
 
 const username = ref(route.params.username)
 
-// TODO: 通过用户名获取用户信息
 getUser(0, username.value).then((res) => {
+  if (res.status_code === constStore.CodeUserNotExist.code) {
+    userNotExist.value = true
+    return
+  }
   if (res.status_code !== constStore.CodeSuccess.code) {
     Message.error(res.status_msg)
     return
   }
-  console.log(res);
+  console.log(res)
   for (let key in res.user) {
     user[key] = res.user[key]
   }

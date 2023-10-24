@@ -1,6 +1,7 @@
 import { get, post, put } from '../api'
 
 export function avatarPath(avatar) {
+  if (avatar === '') return ''
   return (
     import.meta.env.VITE_BASE_HOST +
     import.meta.env.VITE_API_URI +

@@ -6,12 +6,14 @@
         <div class="note-info-box">
           <div class="note-title">{{ note.title }}</div>
           <div class="note-publish-info">
-            <Avatar
-              :avatar="author.avatar"
-              :name="author.nickname"
-              :size="20"
-            ></Avatar>
-            <div>{{ author.nickname }}</div>
+            <div class="note-publish-author" @click="router.push('/profile/' + author.username)">
+              <Avatar
+                :avatar="avatarPath(author.avatar)"
+                :name="author.nickname"
+                :size="20"
+              ></Avatar>
+              <div>{{ author.nickname }}</div>
+            </div>
             <div>发布于：{{ new Date(note.created_at).toLocaleString() }}</div>
           </div>
         </div>
@@ -23,14 +25,16 @@
 
 <script setup>
 import { onMounted, ref, reactive } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { getNote } from '../services/note'
 import { useConstStore } from '../store/const'
 import { Message } from '@arco-design/web-vue'
 import Container from '../components/common/Container.vue'
 import Avatar from '../components/common/Avatar.vue'
+import { avatarPath } from '../services/user'
 
 const route = useRoute()
+const router = useRouter()
 const constStore = useConstStore()
 
 const id = ref(route.params.id)
@@ -53,12 +57,6 @@ onMounted(() => {
     for (const key in res.user) {
       author[key] = res.user[key]
     }
-    if (author.avatar && author.avatar !== '')
-      author.avatar =
-        import.meta.env.VITE_BASE_HOST +
-        import.meta.env.VITE_STATIC_HOST +
-        author.avatar
-    else author.avatar = ''
   })
 })
 </script>
@@ -79,6 +77,17 @@ onMounted(() => {
       display: flex;
       align-items: center;
       gap: 10px;
+
+      .note-publish-author {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+
+        :hover {
+          color: rgb(var(--primary-6));
+        }
+      }
     }
 
     .note-title {

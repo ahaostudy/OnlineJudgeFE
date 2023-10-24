@@ -2,13 +2,13 @@
   <div id="note-list-container">
     <div class="note-card" v-for="note in notes" :key="note.id">
       <div class="note-card-top">
-        <a-avatar
-          :style="{ width: '24px', height: '24px' }"
-          :imageUrl="appStore.user.avatar"
-        >
-        </a-avatar>
-        <div class="note-card-top-name">
-          {{ appStore.user.nickname }}
+        <Avatar
+          :size="24"
+          :avatar="avatarPath(note.author.avatar)"
+          :name="note.author.nickname"
+        ></Avatar>
+        <div class="note-card-top-name" @click="router.push('/profile/' + note.author.username)">
+          {{ note.author.nickname }}
         </div>
       </div>
       <div class="note-card-body">
@@ -32,13 +32,15 @@
 
 <script setup>
 import { onMounted, reactive } from 'vue'
+import { useRouter } from 'vue-router'
 import { getNotes } from '../../../services/note'
 import { useConstStore } from '../../../store/const'
-import { useAppStore } from '../../../store/app'
 import { Message } from '@arco-design/web-vue'
+import { avatarPath } from '../../../services/user'
+import Avatar from '../../common/Avatar.vue'
 
+const router = useRouter()
 const constStore = useConstStore()
-const appStore = useAppStore()
 
 const notes = reactive([])
 
@@ -73,9 +75,13 @@ onMounted(() => {
     display: flex;
     align-items: center;
     gap: 10px;
+    cursor: pointer;
 
     .note-card-top-name {
       color: var(--color-neutral-8);
+    }
+    :hover {
+      color: rgb(var(--primary-6));
     }
   }
 

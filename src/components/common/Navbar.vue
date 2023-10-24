@@ -82,6 +82,10 @@ const props = defineProps({
 })
 
 onMounted(() => {
+  if (appStore?.user?.id) {
+    logined.value = true
+    return
+  }
   if (localStorage.getItem('token')) {
     logined.value = true
     getUser(-1).then((res) => {

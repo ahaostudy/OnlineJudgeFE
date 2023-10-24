@@ -30,7 +30,7 @@ const input = ref('')
 const output = ref('')
 const problemID = ref(0)
 
-getUser(0).then((res) => {
+getUser(-1).then((res) => {
   if (res.status_code !== constStore.CodeSuccess.code || res.user.role !== 1) {
     router.back()
   }
@@ -38,11 +38,11 @@ getUser(0).then((res) => {
 
 function createTestcase() {
   postCreateTestcase(problemID.value, input.value, output.value).then((res) => {
-    if (res.status_code === constStore.CodeSuccess.code) {
-      Message.success(res.status_msg)
-    } else {
+    if (res.status_code !== constStore.CodeSuccess.code) {
       Message.error(res.status_msg)
+      return
     }
+    Message.success(res.status_msg)
   })
 }
 </script>

@@ -12,6 +12,7 @@
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'var(--color-neutral-1)',
         color: 'rgb(var(--primary-6))'
       }"
     >
@@ -38,6 +39,7 @@
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: 'var(--color-neutral-1)',
         color: 'rgb(var(--primary-6))'
       }"
       v-else

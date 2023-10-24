@@ -5,7 +5,7 @@
         <Avatar
           :avatar="avatar"
           :name="props.user.nickname"
-          :show-edit-button="true"
+          :show-edit-button="props.user.id === appStore.user.id"
           @click-icon="showAvatarTrigger = true"
           :size="160"
         />
@@ -17,7 +17,7 @@
             style="display: none"
           />
           <div @click="selectAvatar">上传头像</div>
-          <!-- <div>删除头像</div> -->
+          <div @click="deleteAvatar">删除头像</div>
         </div>
       </div>
       <div class="user-info-box">
@@ -49,7 +49,9 @@
             ></a-input>
           </div>
         </template>
-        <a-button> <icon-edit />编辑 </a-button>
+        <a-button v-show="props.user.id === appStore.user.id">
+          编辑资料
+        </a-button>
       </a-popconfirm>
     </div>
   </div>
@@ -116,6 +118,22 @@ function uploadAvatar(event) {
     })
   }
 }
+function deleteAvatar() {
+  // TODO: 删除头像
+  Message.warning('暂不支持')
+  return
+  putUpdateUser(appStore.user.id, {
+    avatar: ''
+  }).then((res) => {
+    if (res.status_code != constStore.CodeSuccess.code) {
+      Message.error(res.status_msg)
+      return
+    }
+
+    Message.success('删除成功')
+    location.reload()
+  })
+}
 
 const nickname = ref('')
 function updateName() {
@@ -168,13 +186,14 @@ watch(
 
       display: inline-flex;
       flex-direction: column;
+      gap: 3px;
       padding: 8px;
       border-radius: 8px;
       box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 
       div {
         border-radius: 5px;
-        padding: 4px 12px;
+        padding: 5px 12px;
       }
       div:hover {
         background-color: #f0f0f0;
