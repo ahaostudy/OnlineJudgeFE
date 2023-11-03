@@ -7,16 +7,17 @@
           :avatar="avatarPath(note.author.avatar)"
           :name="note.author.nickname"
         ></Avatar>
-        <div class="note-card-top-name" @click="router.push('/profile/' + note.author.username)">
-          {{ note.author.nickname }}
+        <div class="note-card-top-name">
+          <router-link :to="'/profile/' + note.author.username">
+            {{ note.author.nickname }}
+          </router-link>
         </div>
       </div>
       <div class="note-card-body">
-        <div
-          class="note-card-body-title"
-          @click="$router.push(`/note/${note.id}`)"
-        >
-          {{ note.title }}
+        <div class="note-card-body-title">
+          <router-link :to="`/note/${note.id}`">
+            {{ note.title }}
+          </router-link>
         </div>
         <div class="note-card-body-content">
           {{

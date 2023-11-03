@@ -1,13 +1,15 @@
 <template>
   <div id="problem-container">
     <div id="top-container">
-      <img
-        alt="logo"
-        src="../assets/logo.svg"
-        style="height: 26px"
-        class="btn-index"
-        @click="router.push('/problems')"
-      />
+      <router-link to="/problems">
+        <img
+          alt="logo"
+          src="../assets/logo.svg"
+          style="height: 26px"
+          class="btn-index"
+          @click="router.push('/problems')"
+        />
+      </router-link>
       {{ id }}. {{ problem.title }}
     </div>
     <div id="main-container">
@@ -22,7 +24,7 @@
           </div>
         </template>
         <template #second>
-          <Work :id="id" :problem="problem"></Work>
+          <Work :id="id" :tab="tab" :problem="problem"></Work>
         </template>
       </a-split>
     </div>
@@ -40,6 +42,7 @@ const route = useRoute()
 const router = useRouter()
 
 const id = ref(route.params.id)
+const tab = ref(route.params.tab)
 const problem = reactive({
   title: ''
 })

@@ -2,7 +2,11 @@
   <div id="work-container">
     <a-tabs v-model:active-key="activeKey">
       <a-tab-pane key="1">
-        <template #title> <icon-code /> 代码 </template>
+        <template #title>
+          <router-link :to="`/problem/${props.id}`">
+            <icon-code /> 代码
+          </router-link>
+        </template>
 
         <Buttons
           @debug="debug"
@@ -20,7 +24,11 @@
         </Editor>
       </a-tab-pane>
       <a-tab-pane key="2">
-        <template #title> <icon-check-square /> 测试样例 </template>
+        <template #title>
+          <router-link :to="`/problem/${props.id}/testcases`">
+            <icon-check-square /> 测试样例
+          </router-link>
+        </template>
         <Buttons
           @debug="debug"
           @submit="submit"
@@ -38,7 +46,11 @@
         </Console>
       </a-tab-pane>
       <a-tab-pane key="3" :style="{ overflowY: 'auto' }">
-        <template #title> <icon-history /> 提交记录 </template>
+        <template #title>
+          <router-link :to="`/problem/${props.id}/submits`">
+            <icon-history /> 提交记录
+          </router-link>
+        </template>
         <Submits :id="props.id"></Submits>
       </a-tab-pane>
     </a-tabs>
@@ -82,11 +94,24 @@ import Chat from './Chat.vue'
 
 const props = defineProps({
   id: { require: true },
+  tab: { require: true },
   problem: { require: true }
 })
 const constStore = useConstStore()
 
-const activeKey = ref('1')
+const activeKey = ref()
+switch (props.tab) {
+  case 'testcases':
+    activeKey.value = '2'
+    break
+  case 'submits':
+    activeKey.value = '3'
+    break
+  default:
+    activeKey.value = '1'
+    break
+}
+
 const language = ref(Number(localStorage.getItem(`language`)) || 1)
 const sample = ref(0)
 const code = ref(

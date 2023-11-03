@@ -6,9 +6,9 @@
         {{ note.created_at }}
         <template #label>
           <a-typography-title :heading="6">
-            <div class="note-title">
+            <router-link :to="`/note/${note.id}`" class="note-title">
               {{ note.title }}
-            </div>
+            </router-link>
           </a-typography-title>
           <a-typography-text type="secondary">
             <div class="note-content">

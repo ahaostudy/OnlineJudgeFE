@@ -18,13 +18,21 @@
       </div>
       <div class="center-side">
         <a-menu mode="horizontal" :default-selected-keys="[props.default]">
-          <a-menu-item key="1">首页</a-menu-item>
-          <a-menu-item key="2" @click="router.push('/problems')"
-            >题库</a-menu-item
-          >
-          <a-menu-item key="3">竞赛</a-menu-item>
-          <a-menu-item key="4">校队</a-menu-item>
-          <a-menu-item key="5" @click="router.push('/notes')">笔记</a-menu-item>
+          <a-menu-item key="1">
+            <router-link to="#">首页</router-link>
+          </a-menu-item>
+          <a-menu-item key="2" @click="router.push('/problems')">
+            <router-link to="/problems"> 题库 </router-link>
+          </a-menu-item>
+          <a-menu-item key="3">
+            <router-link to="#"> 竞赛 </router-link>
+          </a-menu-item>
+          <a-menu-item key="4">
+            <router-link to="#"> 校队 </router-link>
+          </a-menu-item>
+          <a-menu-item key="5">
+            <router-link to="/notes"> 笔记 </router-link>
+          </a-menu-item>
         </a-menu>
       </div>
       <ul class="right-side">
