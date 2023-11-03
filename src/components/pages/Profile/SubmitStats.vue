@@ -33,7 +33,7 @@
               困难题
               <template #actions> {{ submitStatistics.hard_count }} </template>
             </a-list-item>
-            <a-list-item style="padding: 0;"></a-list-item>
+            <a-list-item style="padding: 0"></a-list-item>
           </a-list>
         </div>
         <div class="user-submit-statistics-half">
@@ -45,7 +45,7 @@
               {{ constStore.Languages[lang.id] }}
               <template #actions> {{ lang.count }} </template>
             </a-list-item>
-            <a-list-item style="padding: 0;"></a-list-item>
+            <a-list-item style="padding: 0"></a-list-item>
           </a-list>
         </div>
       </div>
@@ -78,8 +78,9 @@
               v-else
               :style="{ color: '#f53f3f' }"
             />
-            <!-- TODO: 改为题目标题 -->
-            {{ `${submit.problem_id}. ${submit.problem.title}` }}
+            <router-link :to="`/problem/${submit.problem_id}`">
+              {{ `${submit.problem_id}. ${submit.problem.title}` }}
+            </router-link>
           </div>
           <template #actions>
             {{ new Date(submit.created_at).toLocaleDateString() }}

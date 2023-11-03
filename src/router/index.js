@@ -28,6 +28,10 @@ const routes = [
     component: Problem
   },
   {
+    path: '/problem/:id/:tab',
+    component: Problem
+  },
+  {
     path: '/problem/preview/:id',
     component: ProblemPreview
   },

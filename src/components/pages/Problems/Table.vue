@@ -18,11 +18,10 @@
           />
         </template>
         <template #title="{ record }">
-          <a-typography-text
-            @click="pushProblemDetail(record.id)"
-            class="title"
-          >
-            {{ record.title }}
+          <a-typography-text class="title">
+            <router-link :to="'/problem/' + record.id">
+              {{ record.title }}
+            </router-link>
           </a-typography-text>
         </template>
         <!-- <template #difficulty="{ record }">
@@ -109,10 +108,6 @@ function updateProblems(page) {
     }
     current.value = page
   })
-}
-
-function pushProblemDetail(id) {
-  router.push('/problem/' + id)
 }
 
 onMounted(() => {
