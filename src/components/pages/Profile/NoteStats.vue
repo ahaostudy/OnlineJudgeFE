@@ -17,7 +17,7 @@
           </a-typography-text>
         </template>
       </a-timeline-item>
-      <a-timeline-item> </a-timeline-item>
+      <a-timeline-item />
     </a-timeline>
   </div>
 </template>
@@ -72,6 +72,7 @@ watch(
 
 .note-content {
   padding-bottom: 24px;
+  line-height: 26px;
 }
 </style>
 

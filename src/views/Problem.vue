@@ -1,15 +1,7 @@
 <template>
   <div id="problem-container">
     <div id="top-container">
-      <router-link to="/problems">
-        <img
-          alt="logo"
-          src="../assets/logo.svg"
-          style="height: 26px"
-          class="btn-index"
-          @click="router.push('/problems')"
-        />
-      </router-link>
+      <Logo to="/problems" style="margin-right: 20px" />
       {{ id }}. {{ problem.title }}
     </div>
     <div id="main-container">
@@ -37,6 +29,7 @@ import Info from '../components/pages/Problem/Info.vue'
 import Work from '../components/pages/Problem/Work.vue'
 import { ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import Logo from '../components/common/Logo.vue'
 
 const route = useRoute()
 const router = useRouter()

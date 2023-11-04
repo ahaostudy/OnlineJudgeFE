@@ -42,7 +42,9 @@
               v-for="lang in submitStatistics.lang_counts"
               :key="lang.id"
             >
-              {{ constStore.Languages[lang.id] }}
+              <a-tag :color="getRandomColor()">
+                {{ constStore.Languages[lang.id - 1] }}
+              </a-tag>
               <template #actions> {{ lang.count }} </template>
             </a-list-item>
             <a-list-item style="padding: 0"></a-list-item>
@@ -112,6 +114,26 @@ const props = defineProps({
     }
   }
 })
+const colors = [
+  'red',
+  'orangered',
+  'orange',
+  'gold',
+  'lime',
+  'green',
+  'cyan',
+  'blue',
+  'arcoblue',
+  'purple',
+  'pinkpurple',
+  'magenta'
+]
+function getRandomColor() {
+  const idx = Math.floor(Math.random() * colors.length)
+  const color = colors[idx]
+  colors.splice(idx, 1)
+  return color
+}
 
 const calendarData = reactive({})
 const latestSubmits = reactive([])
@@ -136,7 +158,6 @@ watch(
         calendarData[key] = res.data[key]
       }
     })
-    //TODO: 通过用户ID获取最近提交
     getLatestSubmits(6, id).then((res) => {
       if (res.status_code !== constStore.CodeSuccess.code) {
         Message.error(res.status_msg)
