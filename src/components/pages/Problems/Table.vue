@@ -24,11 +24,6 @@
             </router-link>
           </a-typography-text>
         </template>
-        <!-- <template #difficulty="{ record }">
-                    <a-typography-text :type="['success', 'warning', 'danger'][record.difficulty]">
-                        {{ record.difficultyText }}
-                    </a-typography-text>
-                </template> -->
         <template #submit_status="{ record }">
           <a-progress
             size="mini"

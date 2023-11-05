@@ -40,7 +40,6 @@ import { Message } from '@arco-design/web-vue'
 import { avatarPath } from '../../../services/user'
 import Avatar from '../../common/Avatar.vue'
 
-const router = useRouter()
 const constStore = useConstStore()
 
 const notes = reactive([])
@@ -106,6 +105,7 @@ onMounted(() => {
     .note-card-body-content {
       color: var(--color-neutral-8);
       padding-bottom: 10px;
+      line-height: 26px;
     }
   }
 }

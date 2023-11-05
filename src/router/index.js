@@ -9,6 +9,8 @@ const Notes = () => import('../views/Notes.vue')
 const Note = () => import('../views/Note.vue')
 const Profile = () => import('../views/Profile.vue')
 const NotFound = () => import('../views/NotFound.vue')
+const NoteEditor = () => import('../views/NoteEditor.vue')
+const Submit = () => import('../views/Submit.vue')
 
 const routes = [
   {
@@ -44,6 +46,14 @@ const routes = [
     component: Notes
   },
   {
+    path: '/note/editor',
+    component: NoteEditor
+  },
+  {
+    path: '/note/editor/:id',
+    component: NoteEditor
+  },
+  {
     path: '/note/:id',
     component: Note
   },
@@ -54,6 +64,10 @@ const routes = [
   {
     path: '/:pathMatch(.*)',
     component: NotFound
+  },
+  {
+    path: '/submit/:id',
+    component: Submit
   }
 ]
 

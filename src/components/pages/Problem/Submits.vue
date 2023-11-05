@@ -24,12 +24,13 @@
       <div class="preview-box" v-show="!loading && !empty && !editing">
         <div class="preview-btns">
           <div style="color: var(--color-neutral-8)">
-            <icon-file v-show="submit.note_id" />
-            {{
-              submit.note_id
-                ? `${submit.note.title}`
-                : `提交于：${submit.createdTime}`
-            }}
+            <div class="btn-note" v-if="submit.note_id">
+              <router-link :to="`/note/${submit.note_id}`">
+                <icon-file />
+                {{ submit.note.title }}
+              </router-link>
+            </div>
+            <div v-else>提交于：{{ submit.createdTime }}</div>
           </div>
           <a-button type="text" @click="editing = true">
             <template #icon>
@@ -112,7 +113,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watch, effect } from 'vue'
 import { getSubmit, getSubmits } from '../../../services/submit'
 import { postCreateNote, putUpdateNote } from '../../../services/note'
 import { useConstStore } from '../../../store/const'
@@ -279,11 +280,40 @@ function selectSubmit(record) {
       `${submit.code}\n` +
       '```\n'
     if (!submit.note_id) {
-      submit.note.content = `[//]: # (笔记填到此处嗷~)\n\n\n\n[//]: # (笔记_END)\n\n\n***\n\n<br>\n\n${submitInfo.value}`
+      submit.note.content = '\n\n\n' + submitInfo.value
     }
     loading.value = false
   })
 }
+
+function getFirstLine(text) {
+  const newlineIndex = text.indexOf('\n')
+  if (newlineIndex !== -1) return text.substring(0, newlineIndex)
+  return text
+}
+
+function extractTitleFromMarkdown(text) {
+  const match = text.match(/^#+\s*(.+)/)
+  if (match) return match[1]
+  return ''
+}
+
+watch(
+  () => submit.note.content,
+  (newVal, oldVal) => {
+    const newFirstLine = getFirstLine(newVal)
+    const oldFirstLine = getFirstLine(oldVal)
+    const newTitle = extractTitleFromMarkdown(newFirstLine)
+    const oldTitle = extractTitleFromMarkdown(oldFirstLine)
+    if (
+      submit.note.title === '' ||
+      (newFirstLine?.length > 0 && newFirstLine[0] === '#') ||
+      (submit.note.title === oldTitle && newTitle !== oldTitle)
+    ) {
+      submit.note.title = newTitle
+    }
+  }
+)
 
 function saveNote() {
   if (!submit.note.title) {
@@ -327,6 +357,14 @@ onMounted(() => {
 .preview-box {
   display: flex;
   flex-direction: column;
+
+  .btn-note {
+    cursor: pointer;
+  }
+
+  .btn-note:hover {
+    color: rgb(var(--primary-6));
+  }
 
   .preview-btns {
     padding: 6px 9px 6px 24px;
