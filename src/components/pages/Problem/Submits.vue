@@ -114,9 +114,9 @@
 
 <script setup>
 import { ref, reactive, onMounted, watch, effect } from 'vue'
-import { getSubmit, getSubmits } from '../../../services/submit'
-import { postCreateNote, putUpdateNote } from '../../../services/note'
-import { useConstStore } from '../../../store/const'
+import { getSubmit, getSubmits } from '@/services/submit'
+import { postCreateNote, putUpdateNote } from '@/services/note'
+import { useConstStore } from '@/store/const'
 import { Message } from '@arco-design/web-vue'
 
 const props = defineProps({

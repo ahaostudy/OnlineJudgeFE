@@ -30,15 +30,15 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { getUser } from '../services/user'
-import { useConstStore } from '../store/const'
+import { getUser } from '@/services/user'
+import { useConstStore } from '@/store/const'
 import { Message } from '@arco-design/web-vue'
-import Container from '../components/common/Container.vue'
-import Info from '../components/pages/Profile/Info.vue'
-import SubmitStats from '../components/pages/Profile/SubmitStats.vue'
-import NoteStats from '../components/pages/Profile/NoteStats.vue'
-import Description from '../components/pages/Profile/Description.vue'
-import NotFound from './NotFound.vue'
+import Container from '@/components/common/Container.vue'
+import Info from '@/components/pages/Profile/Info.vue'
+import SubmitStats from '@/components/pages/Profile/SubmitStats.vue'
+import NoteStats from '@/components/pages/Profile/NoteStats.vue'
+import Description from '@/components/pages/Profile/Description.vue'
+import NotFound from '@/views/NotFound.vue'
 
 const route = useRoute()
 const constStore = useConstStore()

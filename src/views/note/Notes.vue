@@ -26,9 +26,9 @@
 </template>
 
 <script setup>
-import Navbar from '../components/common/Navbar.vue'
-import List from '../components/pages/Notes/List.vue'
-import Container from '../components/common/Container.vue'
+import Navbar from '@/components/common/Navbar.vue'
+import List from '@/components/pages/Notes/List.vue'
+import Container from '@/components/common/Container.vue'
 </script>
 
 <style scoped lang="less">

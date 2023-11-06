@@ -33,13 +33,13 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { getSubmit } from '../services/submit'
-import { useConstStore } from '../store/const'
+import { getSubmit } from '@/services/submit'
+import { useConstStore } from '@/store/const'
 import { Message } from '@arco-design/web-vue'
-import Container from '../components/common/Container.vue'
-import Avatar from '../components/common/Avatar.vue'
-import { avatarPath, getUser } from '../services/user'
-import { getProblem } from '../services/problem'
+import Container from '@/components/common/Container.vue'
+import Avatar from '@/components/common/Avatar.vue'
+import { avatarPath, getUser } from '@/services/user'
+import { getProblem } from '@/services/problem'
 
 const route = useRoute()
 const constStore = useConstStore()

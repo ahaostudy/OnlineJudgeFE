@@ -75,13 +75,13 @@
 <script setup>
 import { onMounted, ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getNote, deleteNote } from '../services/note'
-import { useConstStore } from '../store/const'
+import { getNote, deleteNote } from '@/services/note'
+import { useConstStore } from '@/store/const'
 import { Message } from '@arco-design/web-vue'
-import Container from '../components/common/Container.vue'
-import Avatar from '../components/common/Avatar.vue'
-import { avatarPath } from '../services/user'
-import { useAppStore } from '../store/app'
+import Container from '@/components/common/Container.vue'
+import Avatar from '@/components/common/Avatar.vue'
+import { avatarPath } from '@/services/user'
+import { useAppStore } from '@/store/app'
 
 const route = useRoute()
 const router = useRouter()

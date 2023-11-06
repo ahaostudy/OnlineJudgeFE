@@ -24,8 +24,8 @@
 
 <script setup>
 import { reactive, watch } from 'vue'
-import { getNotes } from '../../../services/note'
-import { useConstStore } from '../../../store/const'
+import { getNotes } from '@/services/note'
+import { useConstStore } from '@/store/const'
 
 const constStore = useConstStore()
 

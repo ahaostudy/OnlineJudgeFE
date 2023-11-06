@@ -63,10 +63,10 @@ import {
   avatarPath,
   putUpdateAvatar,
   putUpdateUser
-} from '../../../services/user'
+} from '@/services/user'
 import { ref, watch, onMounted } from 'vue'
-import { useAppStore } from '../../../store/app'
-import { useConstStore } from '../../../store/const'
+import { useAppStore } from '@/store/app'
+import { useConstStore } from '@/store/const'
 import { Message } from '@arco-design/web-vue'
 
 const appStore = useAppStore()

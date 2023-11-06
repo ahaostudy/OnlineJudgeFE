@@ -40,7 +40,7 @@ const routes = [
   {
     path: '/submit/:id',
     component: Submit
-  }
+  },
   {
     path: '/notes',
     component: Notes

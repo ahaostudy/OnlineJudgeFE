@@ -93,10 +93,10 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import Navbar from '../components/common/Navbar.vue'
-import Table from '../components/pages/Problems/Table.vue'
-import { getLatestSubmits } from '../services/submit'
-import { useConstStore } from '../store/const'
+import Navbar from '@/components/common/Navbar.vue'
+import Table from '@/components/pages/Problems/Table.vue'
+import { getLatestSubmits } from '@/services/submit'
+import { useConstStore } from '@/store/const'
 
 const constStore = useConstStore()
 

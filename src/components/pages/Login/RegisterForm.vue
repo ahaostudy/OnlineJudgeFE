@@ -34,9 +34,9 @@
 <script setup>
 import { ref } from 'vue'
 import { Message } from '@arco-design/web-vue'
-import { postRegister, postSendCaptcha } from '../../../services/user'
+import { postRegister, postSendCaptcha } from '@/services/user'
 import { useRouter } from 'vue-router'
-import { useConstStore } from '../../../store/const'
+import { useConstStore } from '@/store/const'
 
 const router = useRouter()
 const constStore = useConstStore()

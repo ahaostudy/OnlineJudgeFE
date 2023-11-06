@@ -7,7 +7,7 @@
     >
       <div class="left-side">
         <a-space>
-          <img alt="logo" src="../../assets/logo.svg" class="logo" />
+          <img alt="logo" src="@/assets/logo.svg" class="logo" />
           <a-typography-title
             :style="{ margin: 0, fontSize: '18px' }"
             :heading="5"
@@ -71,10 +71,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import { getUser, avatarPath } from '../../services/user'
-import { useConstStore } from '../../store/const'
-import { useAppStore } from '../../store/app'
-import Avatar from '../common/Avatar.vue'
+import { getUser, avatarPath } from '@/services/user'
+import { useConstStore } from '@/store/const'
+import { useAppStore } from '@/store/app'
+import Avatar from '@/components/common/Avatar.vue'
 
 const router = useRouter()
 const constStore = useConstStore()

@@ -82,15 +82,15 @@
 </template>
 
 <script setup>
-import Editor from './Editor.vue'
-import Console from './Console.vue'
-import Buttons from './Buttons.vue'
 import { ref } from 'vue'
-import { postDebug, postSubmit, postGetResult } from '../../../services/submit'
-import { useConstStore } from '../../../store/const'
+import { postDebug, postSubmit, postGetResult } from '@/services/submit'
+import { useConstStore } from '@/store/const'
 import { Message, Notification } from '@arco-design/web-vue'
 import Submits from './Submits.vue'
 import Chat from './Chat.vue'
+import Editor from './Editor.vue'
+import Console from './Console.vue'
+import Buttons from './Buttons.vue'
 
 const props = defineProps({
   id: { require: true },
