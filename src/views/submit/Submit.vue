@@ -69,7 +69,7 @@ getSubmit(id.value).then((res) => {
     `执行用时：${submit.time} ms &nbsp;&nbsp;&nbsp; 执行内存：${
       submit.memory / 1024 / 1024
     } MB\n\n` +
-    `### ${constStore.Languages[submit.lang_id + 1]}\n\n` +
+    `### ${constStore.Languages[submit.lang_id - 1]}\n\n` +
     '``` ' +
     constStore.LanguageSuffixs[submit.lang_id - 1] +
     '\n' +

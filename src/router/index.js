@@ -1,24 +1,20 @@
 import { createRouter, createWebHistory } from 'vue-router'
 const Index = () => import('../views/Index.vue')
 const Login = () => import('../views/Login.vue')
-const Problems = () => import('../views/Problems.vue')
-const Problem = () => import('../views/Problem.vue')
-const ProblemPreview = () => import('../views/ProblemPreview.vue')
-const AdminTestcase = () => import('../views/AdminTestcase.vue')
-const Notes = () => import('../views/Notes.vue')
-const Note = () => import('../views/Note.vue')
-const Profile = () => import('../views/Profile.vue')
 const NotFound = () => import('../views/NotFound.vue')
-const NoteEditor = () => import('../views/NoteEditor.vue')
-const Submit = () => import('../views/Submit.vue')
+const Problems = () => import('../views/problem/Problems.vue')
+const Problem = () => import('../views/problem/Problem.vue')
+const ProblemPreview = () => import('../views/problem/ProblemPreview.vue')
+const AdminTestcase = () => import('../views/admin/AdminTestcase.vue')
+const Notes = () => import('../views/note/Notes.vue')
+const Note = () => import('../views/note/Note.vue')
+const NoteEditor = () => import('../views/note/NoteEditor.vue')
+const Profile = () => import('../views/user/Profile.vue')
+const Submit = () => import('../views/submit/Submit.vue')
 
 const routes = [
   {
     path: '/',
-    component: Problems
-  },
-  {
-    path: '/problems',
     component: Problems
   },
   {
@@ -38,9 +34,13 @@ const routes = [
     component: ProblemPreview
   },
   {
-    path: '/admin/testcase',
-    component: AdminTestcase
+    path: '/problems',
+    component: Problems
   },
+  {
+    path: '/submit/:id',
+    component: Submit
+  }
   {
     path: '/notes',
     component: Notes
@@ -62,13 +62,13 @@ const routes = [
     component: Profile
   },
   {
+    path: '/admin/testcase',
+    component: AdminTestcase
+  },
+  {
     path: '/:pathMatch(.*)',
     component: NotFound
   },
-  {
-    path: '/submit/:id',
-    component: Submit
-  }
 ]
 
 const router = createRouter({
