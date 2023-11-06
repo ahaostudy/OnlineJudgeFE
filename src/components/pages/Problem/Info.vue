@@ -20,8 +20,8 @@
 </template>
 
 <script setup>
-import { getProblem } from '../../../services/problem'
-import { useConstStore } from '../../../store/const'
+import { getProblem } from '@/services/problem'
+import { useConstStore } from '@/store/const'
 import { ref, reactive, defineEmits } from 'vue'
 
 const props = defineProps({

@@ -95,13 +95,13 @@
 
 <script setup>
 import { reactive, watch } from 'vue'
-import { useConstStore } from '../../../store/const'
+import { useConstStore } from '@/store/const'
 import {
   getLatestSubmits,
   getSubmitCalendar,
   getSubmitStatistics
-} from '../../../services/submit'
-import Calendar from '../../common/Calendar.vue'
+} from '@/services/submit'
+import Calendar from '@/components/common/Calendar.vue'
 import { Message } from '@arco-design/web-vue'
 
 const constStore = useConstStore()

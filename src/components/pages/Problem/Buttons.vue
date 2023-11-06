@@ -59,7 +59,7 @@
 </template>
 
 <script setup>
-import { useConstStore } from '../../../store/const'
+import { useConstStore } from '@/store/const'
 import { defineEmits } from 'vue'
 
 const constStore = useConstStore()

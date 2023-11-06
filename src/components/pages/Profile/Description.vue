@@ -35,9 +35,9 @@
 
 <script setup>
 import { ref } from 'vue'
-import { putUpdateUser } from '../../../services/user'
-import { useAppStore } from '../../../store/app'
-import { useConstStore } from '../../../store/const'
+import { putUpdateUser } from '@/services/user'
+import { useAppStore } from '@/store/app'
+import { useConstStore } from '@/store/const'
 import { Message } from '@arco-design/web-vue'
 
 const appStore = useAppStore()

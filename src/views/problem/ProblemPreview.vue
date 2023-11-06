@@ -3,7 +3,7 @@
     <div class="title">
       <img
         alt="logo"
-        src="../assets/logo.svg"
+        src="@/assets/logo.svg"
         style="height: 28px"
         class="btn-index"
       />
@@ -29,8 +29,8 @@
 </template>
 
 <script setup>
-import { getProblem } from '../services/problem'
-import { useConstStore } from '../store/const'
+import { getProblem } from '@/services/problem'
+import { useConstStore } from '@/store/const'
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 

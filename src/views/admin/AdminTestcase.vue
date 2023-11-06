@@ -19,9 +19,9 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { getUser } from '../services/user'
-import { postCreateTestcase } from '../services/problem'
-import { useConstStore } from '../store/const'
+import { getUser } from '@/services/user'
+import { postCreateTestcase } from '@/services/problem'
+import { useConstStore } from '@/store/const'
 
 const router = useRouter()
 const constStore = useConstStore()

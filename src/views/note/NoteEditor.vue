@@ -49,12 +49,12 @@
 
 <script setup>
 import { ref, watch } from 'vue'
-import Logo from '../components/common/Logo.vue'
+import Logo from '@/components/common/Logo.vue'
 import { useRoute, useRouter } from 'vue-router'
-import { getNote, postCreateNote, putUpdateNote } from '../services/note'
-import { useConstStore } from '../store/const'
+import { getNote, postCreateNote, putUpdateNote } from '@/services/note'
+import { useConstStore } from '@/store/const'
 import { Message } from '@arco-design/web-vue'
-import { useAppStore } from '../store/app'
+import { useAppStore } from '@/store/app'
 
 const route = useRoute()
 const router = useRouter()

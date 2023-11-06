@@ -60,9 +60,9 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import { getProblems, getProblemCount } from '../../../services/problem'
-import { useProblemStore } from '../../../store/problem.js'
-import { useConstStore } from '../../../store/const.js'
+import { getProblems, getProblemCount } from '@/services/problem'
+import { useProblemStore } from '@/store/problem.js'
+import { useConstStore } from '@/store/const.js'
 import { Message } from '@arco-design/web-vue'
 import { useRouter } from 'vue-router'
 

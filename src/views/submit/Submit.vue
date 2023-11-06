@@ -33,13 +33,13 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { getSubmit } from '../services/submit'
-import { useConstStore } from '../store/const'
+import { getSubmit } from '@/services/submit'
+import { useConstStore } from '@/store/const'
 import { Message } from '@arco-design/web-vue'
-import Container from '../components/common/Container.vue'
-import Avatar from '../components/common/Avatar.vue'
-import { avatarPath, getUser } from '../services/user'
-import { getProblem } from '../services/problem'
+import Container from '@/components/common/Container.vue'
+import Avatar from '@/components/common/Avatar.vue'
+import { avatarPath, getUser } from '@/services/user'
+import { getProblem } from '@/services/problem'
 
 const route = useRoute()
 const constStore = useConstStore()
@@ -69,7 +69,7 @@ getSubmit(id.value).then((res) => {
     `执行用时：${submit.time} ms &nbsp;&nbsp;&nbsp; 执行内存：${
       submit.memory / 1024 / 1024
     } MB\n\n` +
-    `### ${constStore.Languages[submit.lang_id + 1]}\n\n` +
+    `### ${constStore.Languages[submit.lang_id - 1]}\n\n` +
     '``` ' +
     constStore.LanguageSuffixs[submit.lang_id - 1] +
     '\n' +

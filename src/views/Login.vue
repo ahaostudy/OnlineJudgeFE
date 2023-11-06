@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import Container from '../components/pages/Login/Container.vue'
+import Container from '@/components/pages/Login/Container.vue'
 </script>
 
 <style scoped>

@@ -67,7 +67,7 @@
 
 <script setup>
 import { defineEmits } from 'vue'
-import { useConstStore } from '../../../store/const'
+import { useConstStore } from '@/store/const'
 
 const emit = defineEmits(['update:problem', 'update:sample'])
 const constStore = useConstStore()

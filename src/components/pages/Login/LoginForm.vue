@@ -52,9 +52,9 @@ import {
   postLoginByPassword,
   postLoginByEmail,
   postSendCaptcha
-} from '../../../services/user'
+} from '@/services/user'
 import { useRouter } from 'vue-router'
-import { useConstStore } from '../../../store/const'
+import { useConstStore } from '@/store/const'
 
 const router = useRouter()
 const constStore = useConstStore()
@@ -72,7 +72,6 @@ const captchaError = ref(false)
 const btnSendCaptchaText = ref('发送验证码')
 
 function login() {
-  let token = ''
   if (activeKey.value === '1') {
     // 输入校验
     usernameError.value = !validateNotEmpty(username.value, '请输入账号')

@@ -25,17 +25,17 @@
 
 <script setup>
 import { Message } from '@arco-design/web-vue'
-import Info from '../components/pages/Problem/Info.vue'
-import Work from '../components/pages/Problem/Work.vue'
+import Info from '@/components/pages/Problem/Info.vue'
+import Work from '@/components/pages/Problem/Work.vue'
 import { ref, reactive } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import Logo from '../components/common/Logo.vue'
+import Logo from '@/components/common/Logo.vue'
 
 const route = useRoute()
 const router = useRouter()
 
 const id = ref(route.params.id)
-const tab = ref(route.params.tab)
+const tab = ref(route.params.tab || '')
 const problem = reactive({
   title: ''
 })

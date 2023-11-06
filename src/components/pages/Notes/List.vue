@@ -33,12 +33,11 @@
 
 <script setup>
 import { onMounted, reactive } from 'vue'
-import { useRouter } from 'vue-router'
-import { getNotes } from '../../../services/note'
-import { useConstStore } from '../../../store/const'
+import { getNotes } from '@/services/note'
+import { useConstStore } from '@/store/const'
 import { Message } from '@arco-design/web-vue'
-import { avatarPath } from '../../../services/user'
-import Avatar from '../../common/Avatar.vue'
+import { avatarPath } from '@/services/user'
+import Avatar from '@/components/common/Avatar.vue'
 
 const constStore = useConstStore()
 
