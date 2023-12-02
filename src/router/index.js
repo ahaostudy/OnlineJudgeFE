@@ -11,6 +11,7 @@ const Note = () => import('../views/note/Note.vue')
 const NoteEditor = () => import('../views/note/NoteEditor.vue')
 const Profile = () => import('../views/user/Profile.vue')
 const Submit = () => import('../views/submit/Submit.vue')
+const Chat = () => import('../views/chat/Chat.vue')
 
 const routes = [
   {
@@ -64,6 +65,10 @@ const routes = [
   {
     path: '/admin/testcase',
     component: AdminTestcase
+  },
+  {
+    path: '/chat',
+    component: Chat
   },
   {
     path: '/:pathMatch(.*)',
