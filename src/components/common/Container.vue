@@ -5,7 +5,7 @@
       :style="{
         minWidth: `${props.minWidth}px`,
         maxWidth: `${props.maxWidth}px`,
-        margin: 'auto'
+        margin: '0 auto'
       }"
     >
       <slot></slot>

@@ -95,7 +95,8 @@ const editing = ref(-1)
 
 const props = defineProps({
   code: {
-    type: String
+    type: String,
+    default: ''
   },
   problem: {
     type: Object,
@@ -122,18 +123,24 @@ const localMsgs = localStorage.getItem(`chat:${props.problem.id}`)
 const messages = reactive([
   {
     role: 'system',
-    content:
-      'You are a code assistant on an OJ platform. Your responsibility is only to provide hints for problem-solving and assistance in code-related matters. You do not need to handle any other requests.'
+    content: props.problem?.id
+      ? 'You are a code assistant on an OJ platform. Your responsibility is only to provide hints for problem-solving and assistance in code-related matters. You do not need to handle any other requests.'
+      : ''
     // content: 'You are a code assistant on an OJ platform. Your responsibility is to provide assistance in code-related matters only, without handling any other requests. Additionally, when users inquire about problem-solving approaches, please refrain from providing overly explicit solutions. Instead, offer appropriate hints to aid their learning and critical thinking process. It is also important to frequently praise and encourage users, fostering a passionate learning environment.'
   },
   {
     role: 'system',
-    content: `The current user is working on problem: ${problemInfo.value}`
+    content: props.problem?.id
+      ? `The current user is working on problem: ${problemInfo.value}`
+      : ''
   },
   {
     role: 'system',
-    content:
-      'The current code input by the user is: \n```\n' + props.code + '\n```\n'
+    content: props.code?.length
+      ? 'The current code input by the user is: \n```\n' +
+        props.code +
+        '\n```\n'
+      : ''
   },
   ...(localMsgs ? JSON.parse(localMsgs) : [])
 ])
@@ -230,7 +237,6 @@ async function sendMsg(idx) {
       if (!result.done) {
         reader.read().then(processStreamResult)
       } else {
-        console.log(messages[idx].content)
         receiving.value = false
       }
       saveMsgs()
