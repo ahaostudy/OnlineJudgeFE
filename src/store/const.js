@@ -19,6 +19,7 @@ export const useConstStore = defineStore('const', () => {
   const CodeContestHasStarted = { code: 2014, msg: '比赛已经开始' }
   const CodeContestNotExist = { code: 2015, msg: '比赛不存在' }
   const CodeContestNotOngoing = { code: 2016, msg: '比赛未开始或已结束' }
+  const CodeIllegalPassword = { code: 2016, msg: '密码不合法' }
   const CodeForbidden = { code: 3001, msg: '权限不足' }
   const CodeServerBusy = { code: 4001, msg: '服务繁忙' }
 
@@ -87,6 +88,7 @@ export const useConstStore = defineStore('const', () => {
     CodeContestHasStarted,
     CodeContestNotExist,
     CodeContestNotOngoing,
+    CodeIllegalPassword,
     CodeForbidden,
     CodeServerBusy,
 
