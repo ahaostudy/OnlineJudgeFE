@@ -8,12 +8,21 @@
         :error="emailError"
         allow-clear
       />
-      <a-input-password
-        placeholder="密码"
-        v-model="password"
-        :error="passwordError"
-        allow-clear
-      />
+      <div>
+        <a-input-password
+          placeholder="密码"
+          v-model="password"
+          :error="passwordError"
+          @input="changePassword"
+          allow-clear
+        />
+        <p
+          v-show="passwordError"
+          class="password-tips"
+        >
+          密码长度不小于 8 位，且必须包含数字和字母
+        </p>
+      </div>
       <a-input
         placeholder="验证码"
         v-model="captcha"
@@ -52,12 +61,15 @@ const btnSendCaptchaText = ref('发送验证码')
 
 function register() {
   // 输入校验
+  // email
   emailError.value = !validateEmail(email.value)
-  if (emailError.value) Message.error('请输入正确的邮箱')
-  passwordError.value = !validateNotEmpty(password.value, '请输入密码')
-  captchaError.value = !validateNotEmpty(captcha.value, '请输入验证码')
-  console.log(emailError.value, passwordError.value, captchaError.value)
-  if (emailError.value || passwordError.value || captchaError.value) return
+  if (emailError.value) Message.error('请输入格式正确的邮箱')
+  // password
+  // if (passwordError.value) Message.error('请输入格式正确的密码')
+  // captcha
+  captchaError.value = !captcha.value || captcha.value.length === 0
+  if (captchaError.value) Message.error('请输入验证码')
+  // if (emailError.value || passwordError.value || captchaError.value) return
 
   postRegister(email.value, password.value, captcha.value).then((res) => {
     if (res.status_code !== constStore.CodeSuccess.code) {
@@ -97,17 +109,24 @@ function sendCaptcha() {
   })
 }
 
-function validateNotEmpty(str, error) {
-  const f = str.length === 0
-  if (f) {
-    Message.error(error)
-  }
-  return !f
-}
-
 function validateEmail(email) {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
   return emailRegex.test(email)
+}
+
+function changePassword() {
+  passwordError.value = !validatePassword(password.value)
+}
+
+function validatePassword(password) {
+  if (!password || password.length < 8 || password >= 128) return false;
+  let letter = false, number = false;
+  for (let c of password) {
+    if (c >= 'a' && c <= 'z') letter = true;
+    else if (c >= 'A' && c <= 'Z') letter = true;
+    else if (c >= '0' && c <= '9') number = true;
+  }
+  return letter && number;
 }
 </script>
 
@@ -117,6 +136,18 @@ function validateEmail(email) {
   display: flex;
   flex-direction: column;
   gap: 30px;
+
+  .password-tips {
+    color: red;
+    font-size: 12px;
+    text-align: start;
+
+    height: 37px;
+    width: 125%;
+    margin: 2px 0 -39px 0;
+    transform: scale(0.8);
+    transform-origin: left top;
+  }
 }
 
 #btn-send-captcha {
