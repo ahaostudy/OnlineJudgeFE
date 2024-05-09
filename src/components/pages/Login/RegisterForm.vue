@@ -5,7 +5,7 @@
       <a-input
         placeholder="邮箱"
         v-model="email"
-        :error="emailError"
+        @input="changeEmail"
         allow-clear
       />
       <div>
@@ -20,22 +20,33 @@
           v-show="passwordError"
           class="password-tips"
         >
-          密码长度不小于 8 位，且必须包含数字和字母
+          密码至少有 6 个字符，并且需要包含大、小写字母以及数字或特殊字符
         </p>
       </div>
       <a-input
         placeholder="验证码"
         v-model="captcha"
-        :error="captchaError"
+        @input="changeCaptcha"
         allow-clear
       >
         <template #append>
-          <div @click="sendCaptcha" id="btn-send-captcha">
+          <button
+            @click="sendCaptcha"
+            :disabled="emailError !== false"
+            id="btn-send-captcha"
+            :class="{'btn-send-captcha-disabled': emailError !== false}"
+          >
             {{ btnSendCaptchaText }}
-          </div>
+          </button>
         </template>
       </a-input>
-      <a-button type="primary" @click="register">注册/登录</a-button>
+      <a-button
+        type="primary"
+        @click="register"
+        :disabled="passwordError !== false || captchaError !== false || emailError !== false"
+      >
+        注册/登录
+      </a-button>
     </div>
   </div>
 </template>
@@ -53,24 +64,13 @@ const constStore = useConstStore()
 const email = ref('')
 const password = ref('')
 const captcha = ref('')
-const emailError = ref(false)
-const passwordError = ref(false)
-const captchaError = ref(false)
+const emailError = ref()
+const passwordError = ref()
+const captchaError = ref()
 
 const btnSendCaptchaText = ref('发送验证码')
 
 function register() {
-  // 输入校验
-  // email
-  emailError.value = !validateEmail(email.value)
-  if (emailError.value) Message.error('请输入格式正确的邮箱')
-  // password
-  // if (passwordError.value) Message.error('请输入格式正确的密码')
-  // captcha
-  captchaError.value = !captcha.value || captcha.value.length === 0
-  if (captchaError.value) Message.error('请输入验证码')
-  // if (emailError.value || passwordError.value || captchaError.value) return
-
   postRegister(email.value, password.value, captcha.value).then((res) => {
     if (res.status_code !== constStore.CodeSuccess.code) {
       Message.error(res.status_msg)
@@ -83,11 +83,6 @@ function register() {
 
 function sendCaptcha() {
   if (btnSendCaptchaText.value !== '发送验证码') {
-    return
-  }
-  if (validateEmail(email.value) === false) {
-    Message.error('请输入邮箱')
-    emailError.value = true
     return
   }
   emailError.value = false
@@ -109,6 +104,10 @@ function sendCaptcha() {
   })
 }
 
+function changeEmail() {
+  emailError.value = !validateEmail(email.value)
+}
+
 function validateEmail(email) {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
   return emailRegex.test(email)
@@ -119,14 +118,18 @@ function changePassword() {
 }
 
 function validatePassword(password) {
-  if (!password || password.length < 8 || password >= 128) return false;
-  let letter = false, number = false;
-  for (let c of password) {
-    if (c >= 'a' && c <= 'z') letter = true;
-    else if (c >= 'A' && c <= 'Z') letter = true;
-    else if (c >= '0' && c <= '9') number = true;
+  if (!password || password.length < 6) {
+    return false
   }
-  return letter && number;
+  const hasUpperCase = /[A-Z]/.test(password)
+  const hasLowerCase = /[a-z]/.test(password)
+  const hasNumber = /\d/.test(password)
+  const hasSpecialChar = /[~!?@#$%^&*_\-+=()[\]{}><\\/|"'.,:;]/.test(password)
+  return hasUpperCase && hasLowerCase && (hasNumber || hasSpecialChar)
+}
+
+function changeCaptcha() {
+  captchaError.value = captcha.value?.length !== 6
 }
 </script>
 
@@ -152,11 +155,15 @@ function validatePassword(password) {
 
 #btn-send-captcha {
   font-size: 12px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  cursor: pointer;
 }
 
-#btn-send-captcha:hover {
-  color: #666;
-  cursor: pointer;
+#btn-send-captcha.btn-send-captcha-disabled {
+  cursor: not-allowed;
 }
 </style>
 
